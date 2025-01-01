@@ -1,8 +1,8 @@
 import { env } from '@/env';
-import { auth, currentUser } from '@repo/auth/server';
-import { SidebarProvider } from '@repo/design-system/components/ui/sidebar';
-import { showBetaFeature } from '@repo/feature-flags';
-import { secure } from '@repo/security';
+import { auth, currentUser } from '@interiorly/auth/server';
+import { SidebarProvider } from '@interiorly/design-system/components/ui/sidebar';
+import { showBetaFeature } from '@interiorly/feature-flags';
+import { secure } from '@interiorly/security';
 import type { ReactNode } from 'react';
 import { PostHogIdentifier } from './components/posthog-identifier';
 import { GlobalSidebar } from './components/sidebar';

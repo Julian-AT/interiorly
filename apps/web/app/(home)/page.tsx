@@ -1,5 +1,5 @@
-import { showBetaFeature } from '@repo/feature-flags';
-import { createMetadata } from '@repo/seo/metadata';
+import { showBetaFeature } from '@interiorly/feature-flags';
+import { createMetadata } from '@interiorly/seo/metadata';
 import type { Metadata } from 'next';
 import { Cases } from './components/cases';
 import { CTA } from './components/cta';

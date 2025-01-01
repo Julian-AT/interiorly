@@ -3,19 +3,19 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
-import { useIsMobile } from "@repo/design-system/hooks/use-mobile"
-import { cn } from "@repo/design-system/lib/utils"
-import { Button } from "@repo/design-system/components/ui/button"
-import { Input } from "@repo/design-system/components/ui/input"
-import { Separator } from "@repo/design-system/components/ui/separator"
-import { Sheet, SheetContent, SheetTitle } from "@repo/design-system/components/ui/sheet"
-import { Skeleton } from "@repo/design-system/components/ui/skeleton"
+import { useIsMobile } from "@interiorly/design-system/hooks/use-mobile"
+import { cn } from "@interiorly/design-system/lib/utils"
+import { Button } from "@interiorly/design-system/components/ui/button"
+import { Input } from "@interiorly/design-system/components/ui/input"
+import { Separator } from "@interiorly/design-system/components/ui/separator"
+import { Sheet, SheetContent, SheetTitle } from "@interiorly/design-system/components/ui/sheet"
+import { Skeleton } from "@interiorly/design-system/components/ui/skeleton"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@repo/design-system/components/ui/tooltip"
+} from "@interiorly/design-system/components/ui/tooltip"
 import { ViewVerticalIcon } from "@radix-ui/react-icons"
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state"

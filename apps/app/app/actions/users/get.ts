@@ -4,8 +4,8 @@ import {
   type OrganizationMembership,
   auth,
   clerkClient,
-} from '@repo/auth/server';
-import { tailwind } from '@repo/tailwind-config';
+} from '@interiorly/auth/server';
+import { tailwind } from '@interiorly/tailwind-config';
 
 const getName = (user: OrganizationMembership): string | undefined => {
   let name = user.publicUserData?.firstName;

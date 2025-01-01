@@ -1,6 +1,6 @@
 import { env } from '@/env';
-import { config, withAnalyzer } from '@repo/next-config';
-import { withLogtail, withSentry } from '@repo/observability/next-config';
+import { config, withAnalyzer } from '@interiorly/next-config';
+import { withLogtail, withSentry } from '@interiorly/observability/next-config';
 import type { NextConfig } from 'next';
 
 let nextConfig: NextConfig = withLogtail({ ...config });

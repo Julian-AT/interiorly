@@ -1,10 +1,10 @@
-import { blog } from '@repo/cms';
-import { Feed } from '@repo/cms/components/feed';
-import { Image } from '@repo/cms/components/image';
-import { cn } from '@repo/design-system/lib/utils';
-import type { Blog, WithContext } from '@repo/seo/json-ld';
-import { JsonLd } from '@repo/seo/json-ld';
-import { createMetadata } from '@repo/seo/metadata';
+import { blog } from '@interiorly/cms';
+import { Feed } from '@interiorly/cms/components/feed';
+import { Image } from '@interiorly/cms/components/image';
+import { cn } from '@interiorly/design-system/lib/utils';
+import type { Blog, WithContext } from '@interiorly/seo/json-ld';
+import { JsonLd } from '@interiorly/seo/json-ld';
+import { createMetadata } from '@interiorly/seo/metadata';
 import type { Metadata } from 'next';
 import { draftMode } from 'next/headers';
 import Link from 'next/link';

@@ -1,17 +1,17 @@
 'use client';
 
-import { useOthers, useSelf } from '@repo/collaboration/hooks';
+import { useOthers, useSelf } from '@interiorly/collaboration/hooks';
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '@repo/design-system/components/ui/avatar';
+} from '@interiorly/design-system/components/ui/avatar';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@repo/design-system/components/ui/tooltip';
-import { tailwind } from '@repo/tailwind-config';
+} from '@interiorly/design-system/components/ui/tooltip';
+import { tailwind } from '@interiorly/tailwind-config';
 
 type PresenceAvatarProps = {
   info?: Liveblocks['UserMeta']['info'];

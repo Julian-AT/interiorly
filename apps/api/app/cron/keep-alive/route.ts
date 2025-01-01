@@ -1,4 +1,4 @@
-import { database } from '@repo/database';
+import { database } from '@interiorly/database';
 
 export const POST = async () => {
   const newPage = await database.page.create({

@@ -1,10 +1,10 @@
 'use server';
 
 import { env } from '@/env';
-import { resend } from '@repo/email';
-import { ContactTemplate } from '@repo/email/templates/contact';
-import { parseError } from '@repo/observability/error';
-import { createRateLimiter, slidingWindow } from '@repo/rate-limit';
+import { resend } from '@interiorly/email';
+import { ContactTemplate } from '@interiorly/email/templates/contact';
+import { parseError } from '@interiorly/observability/error';
+import { createRateLimiter, slidingWindow } from '@interiorly/rate-limit';
 import { headers } from 'next/headers';
 
 export const contact = async (

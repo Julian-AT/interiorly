@@ -9,7 +9,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@repo/design-system/components/ui/sheet';
+} from '@interiorly/design-system/components/ui/sheet';
 
 /**
  * Extends the Dialog component to display content that complements the main

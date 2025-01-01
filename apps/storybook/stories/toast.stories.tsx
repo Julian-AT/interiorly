@@ -5,9 +5,9 @@ import {
   ToastAction,
   type ToastActionElement,
   type ToastProps,
-} from '@repo/design-system/components/ui/toast';
-import { Toaster } from '@repo/design-system/components/ui/toaster';
-import { useToast } from '@repo/design-system/hooks/use-toast';
+} from '@interiorly/design-system/components/ui/toast';
+import { Toaster } from '@interiorly/design-system/components/ui/toaster';
+import { useToast } from '@interiorly/design-system/hooks/use-toast';
 
 /**
  * A succinct message that is displayed temporarily.

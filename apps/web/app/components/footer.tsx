@@ -1,5 +1,5 @@
 import { env } from '@/env';
-import { Status } from '@repo/observability/status';
+import { Status } from '@interiorly/observability/status';
 import Link from 'next/link';
 
 export const Footer = () => {

@@ -1,7 +1,7 @@
-import '@repo/design-system/styles/globals.css';
-import { DesignSystemProvider } from '@repo/design-system';
-import { fonts } from '@repo/design-system/lib/fonts';
-import { Toolbar } from '@repo/feature-flags/components/toolbar';
+import '@interiorly/design-system/styles/globals.css';
+import { DesignSystemProvider } from '@interiorly/design-system';
+import { fonts } from '@interiorly/design-system/lib/fonts';
+import { Toolbar } from '@interiorly/feature-flags/components/toolbar';
 import type { ReactNode } from 'react';
 
 type RootLayoutProperties = {

@@ -1,4 +1,4 @@
-import { Toolbar } from '@repo/cms/components/toolbar';
+import { Toolbar } from '@interiorly/cms/components/toolbar';
 import type { ReactNode } from 'react';
 
 type BlogLayoutProps = {

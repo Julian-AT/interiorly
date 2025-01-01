@@ -1,9 +1,9 @@
-import '@repo/design-system/styles/globals.css';
+import '@interiorly/design-system/styles/globals.css';
 import './styles/web.css';
-import { DesignSystemProvider } from '@repo/design-system';
-import { fonts } from '@repo/design-system/lib/fonts';
-import { cn } from '@repo/design-system/lib/utils';
-import { Toolbar } from '@repo/feature-flags/components/toolbar';
+import { DesignSystemProvider } from '@interiorly/design-system';
+import { fonts } from '@interiorly/design-system/lib/fonts';
+import { cn } from '@interiorly/design-system/lib/utils';
+import { Toolbar } from '@interiorly/feature-flags/components/toolbar';
 import type { ReactNode } from 'react';
 import { Footer } from './components/footer';
 import { Header } from './components/header';

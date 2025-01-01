@@ -1,6 +1,6 @@
-import { auth, currentUser } from '@repo/auth/server';
-import { authenticate } from '@repo/collaboration/auth';
-import { tailwind } from '@repo/tailwind-config';
+import { auth, currentUser } from '@interiorly/auth/server';
+import { authenticate } from '@interiorly/collaboration/auth';
+import { tailwind } from '@interiorly/tailwind-config';
 
 const COLORS = [
   tailwind.theme.colors.red[500],

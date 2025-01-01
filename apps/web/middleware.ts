@@ -1,12 +1,12 @@
 import { env } from '@/env';
-import { authMiddleware } from '@repo/auth/middleware';
-import { parseError } from '@repo/observability/error';
-import { secure } from '@repo/security';
+import { authMiddleware } from '@interiorly/auth/middleware';
+import { parseError } from '@interiorly/observability/error';
+import { secure } from '@interiorly/security';
 import {
   noseconeMiddleware,
   noseconeOptions,
   noseconeOptionsWithToolbar,
-} from '@repo/security/middleware';
+} from '@interiorly/security/middleware';
 import { NextResponse } from 'next/server';
 
 export const config = {
