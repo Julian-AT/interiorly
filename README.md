@@ -18,8 +18,6 @@ Interiorly is a cutting-edge platform designed to empower interior designers, ar
 
 ## Features
 
-## Features
-
 - **Real-Time Collaboration**: Work together with your team or clients in real-time to design and refine interior concepts effortlessly.
 
 - **AI-Powered Design Suggestions**: Leverage generative AI to create tailored design ideas and layouts based on your unique requirements.
