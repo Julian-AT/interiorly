@@ -35,6 +35,7 @@ const AppLayout = async ({ children }: AppLayoutProperties) => {
         {children}
       </GlobalSidebar>
       <PostHogIdentifier />
+      <div className="absolute right-4 bottom-4 h-10 w-10 rounded-full bg-muted" />
     </SidebarProvider>
   );
 };
