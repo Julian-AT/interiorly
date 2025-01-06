@@ -1,18 +1,3 @@
-import { database } from '@interiorly/database';
-
-export const POST = async () => {
-  const newPage = await database.page.create({
-    data: {
-      name: 'cron-temp',
-      email: 'test@test.com',
-    },
-  });
-
-  await database.page.delete({
-    where: {
-      id: newPage.id,
-    },
-  });
-
+export const POST = () => {
   return new Response('OK', { status: 200 });
 };
