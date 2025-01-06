@@ -12,10 +12,16 @@ datasource db {
   relationMode = "prisma"
 }
 
-// This is a stub model.
-// Delete it and add your own Prisma models.
-model Page {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+model Document {
+  id               String   @id @default(uuid())
+  ownerId          String
+  title            String
+  content          String
+  coverImageUrl    String?
+  icon             String?
+  isArchived       Boolean  @default(false)
+  isPublished      Boolean  @default(false)
+  parentDocumentId String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }

@@ -18,9 +18,13 @@ const GlobalError = ({ error, reset }: GlobalErrorProperties) => {
 
   return (
     <html lang="en" className={fonts}>
-      <body>
-        <h1>Oops, something went wrong</h1>
-        <Button onClick={() => reset()}>Try again</Button>
+      <body className="flex h-screen flex-col items-center justify-center bg-background">
+        <div className="flex flex-col items-center justify-center gap-4 bg-secondary">
+          <h1 className="font-bold text-xl">Oops, something went wrong</h1>
+          <Button variant="outline" onClick={() => reset()}>
+            Try again
+          </Button>
+        </div>
       </body>
     </html>
   );

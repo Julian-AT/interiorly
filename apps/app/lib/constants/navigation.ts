@@ -1,19 +1,17 @@
-import { AiFileIcon } from '@/app/(authenticated)/components/icons/ai-file-icon';
+import { AiFileIcon } from '@/components/icons/ai-file-icon';
 import {
   Add01Icon,
   Delete02Icon,
   File02Icon,
-  HelpCircleIcon,
   Home05Icon,
   InboxIcon,
-  SearchList01Icon,
-  UserAdd01Icon,
 } from 'hugeicons-react';
 
 export const WORKSPACE_NAV = [
   {
     title: 'Home',
-    url: '/home',
+    tooltip: 'View recent changes and more',
+    url: '/',
     icon: Home05Icon,
     command: 'crtl+h',
   },
@@ -21,19 +19,17 @@ export const WORKSPACE_NAV = [
     title: 'Inbox',
     url: '/inbox',
     icon: InboxIcon,
-    command: 'crtl+i',
+    command: 'crtl+u',
+    tooltip: 'View @mentions and the updates',
   },
   {
     title: 'Interiorly AI',
     url: '/chat',
     icon: AiFileIcon,
-    command: 'crtl+a',
-  },
-  {
-    title: 'Quick Find',
-    url: '#',
-    icon: SearchList01Icon,
-    command: 'crtl+f',
+    command: '',
+    tooltip:
+      'Create drafts, ask questions about your workspace and more powered by AI',
+    isBeta: true,
   },
 ] as const;
 
@@ -42,21 +38,13 @@ export const SECONDARY_NAV = [
     title: 'New Page',
     url: '/',
     icon: Add01Icon,
+    tooltip: 'Create a new page',
   },
   {
     title: 'Trash',
     url: '#',
     icon: Delete02Icon,
-  },
-  {
-    title: 'Help',
-    url: '#',
-    icon: HelpCircleIcon,
-  },
-  {
-    title: 'Invite Members',
-    url: '#',
-    icon: UserAdd01Icon,
+    tooltip: 'View deleted pages',
   },
 ] as const;
 

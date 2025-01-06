@@ -11,7 +11,7 @@ import {
 } from '@interiorly/design-system/components/ui/popover';
 import {} from 'hugeicons-react';
 
-export const UserProfileSection = () => {
+export const UserProfilePopover = () => {
   const { user } = useUser();
 
   if (!user) {

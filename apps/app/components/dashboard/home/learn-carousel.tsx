@@ -41,13 +41,9 @@ const LearnCarousel = ({ items }: LearnCarouselProps) => {
     updateState();
 
     api.on('select', updateState);
-    api.on('scroll', updateState);
-    api.on('settle', updateState);
 
     return () => {
       api.off('select', updateState);
-      api.off('scroll', updateState);
-      api.off('settle', updateState);
     };
   }, [api]);
 

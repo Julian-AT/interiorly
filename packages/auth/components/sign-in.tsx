@@ -7,5 +7,6 @@ export const SignIn = () => (
         header: 'hidden',
       },
     }}
+    signUpUrl={'/sign-up'}
   />
 );

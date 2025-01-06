@@ -4,13 +4,16 @@ import {
   noseconeOptions,
   noseconeOptionsWithToolbar,
 } from '@interiorly/security/middleware';
+import type { NextMiddleware } from 'next/server';
 import { env } from './env';
 
 const securityHeaders = env.FLAGS_SECRET
   ? noseconeMiddleware(noseconeOptionsWithToolbar)
   : noseconeMiddleware(noseconeOptions);
 
-export default authMiddleware(() => securityHeaders());
+export default authMiddleware(() =>
+  securityHeaders()
+) as unknown as NextMiddleware;
 
 export const config = {
   matcher: [

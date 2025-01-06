@@ -7,5 +7,7 @@ export const SignUp = () => (
         header: 'hidden',
       },
     }}
+    forceRedirectUrl={'/onboarding'}
+    signInUrl={'/sign-in'}
   />
 );

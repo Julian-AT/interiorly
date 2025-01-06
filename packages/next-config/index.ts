@@ -35,9 +35,15 @@ export const config: NextConfig = {
     ];
   },
 
-  webpack(config, { isServer }) {
+  webpack(config, { isServer, buildId, webpack }) {
     if (isServer) {
-      config.plugins = [...config.plugins, new PrismaPlugin()];
+      config.plugins = [
+        ...config.plugins,
+        new PrismaPlugin(),
+        new webpack.DefinePlugin({
+          'process.env.NEXT_PUBLIC_BUILD_ID': JSON.stringify(buildId),
+        }),
+      ];
     }
 
     config.ignoreWarnings = [{ module: otelRegex }];
