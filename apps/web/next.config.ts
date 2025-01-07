@@ -32,4 +32,4 @@ if (env.ANALYZE === 'true') {
   nextConfig = withAnalyzer(nextConfig);
 }
 
-export default withCMS(nextConfig);
+export default withCMS(nextConfig) as unknown as NextConfig;
