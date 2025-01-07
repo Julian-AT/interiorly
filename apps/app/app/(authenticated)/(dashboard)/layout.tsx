@@ -26,8 +26,6 @@ const AppLayout = async ({ children }: AppLayoutProperties) => {
     return redirect('/onboarding');
   }
 
-  const betaFeature = await showBetaFeature();
-
   if (!env.LIVEBLOCKS_SECRET) {
     return <div>No liveblocks secret</div>;
   }
@@ -35,16 +33,11 @@ const AppLayout = async ({ children }: AppLayoutProperties) => {
   return (
     <SidebarProvider>
       <GlobalSidebar>
-        {betaFeature && (
-          <div className="m-4 rounded-full bg-success p-1.5 text-center text-sm text-success-foreground">
-            Beta feature now available
-          </div>
-        )}
         <CollaborationProvider orgId={orgId}>{children}</CollaborationProvider>
       </GlobalSidebar>
       <PostHogIdentifier />
       <QuickSearch />
-      <div className="fixed right-4 bottom-4 h-10 w-10 rounded-full bg-muted" />
+      {/* <div className="fixed right-4 bottom-4 h-10 w-10 rounded-full bg-muted" /> */}
     </SidebarProvider>
   );
 };

@@ -3,10 +3,14 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "@interiorly/*": ["../../packages/*"]
+      "@/*": [
+        "./*"
+      ],
+      "@interiorly/*": [
+        "../../packages/*"
+      ]
     },
-    "jsx": "react-jsx"
+    "jsx": "preserve"
   },
   "include": [
     "next-env.d.ts",
