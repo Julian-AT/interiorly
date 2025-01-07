@@ -7,11 +7,9 @@ import {
   noseconeOptions,
   noseconeOptionsWithToolbar,
 } from '@interiorly/security/middleware';
-import { NextResponse } from 'next/server';
+import { type NextMiddleware, NextResponse } from 'next/server';
 
 export const config = {
-  // matcher tells Next.js which routes to run the middleware on. This runs the
-  // middleware on all routes except for static assets and Posthog ingest
   matcher: ['/((?!_next/static|_next/image|ingest|favicon.ico).*)'],
 };
 
@@ -26,12 +24,7 @@ export default authMiddleware(async (_auth, request) => {
 
   try {
     await secure(
-      [
-        // See https://docs.arcjet.com/bot-protection/identifying-bots
-        'CATEGORY:SEARCH_ENGINE', // Allow search engines
-        'CATEGORY:PREVIEW', // Allow preview links to show OG images
-        'CATEGORY:MONITOR', // Allow uptime monitoring services
-      ],
+      ['CATEGORY:SEARCH_ENGINE', 'CATEGORY:PREVIEW', 'CATEGORY:MONITOR'],
       request
     );
 
@@ -41,4 +34,4 @@ export default authMiddleware(async (_auth, request) => {
 
     return NextResponse.json({ error: message }, { status: 403 });
   }
-});
+}) as unknown as NextMiddleware;
