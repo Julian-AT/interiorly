@@ -1,7 +1,4 @@
-import {
-  Button,
-  buttonVariants,
-} from '@interiorly/design-system/components/ui/button';
+import { buttonVariants } from '@interiorly/design-system/components/ui/button';
 import {
   Collapsible,
   CollapsibleContent,
@@ -20,6 +17,7 @@ import {
 } from 'hugeicons-react';
 import { AnimatePresence, motion } from 'motion/react';
 import type React from 'react';
+import { IconWrapper } from './icon-wrapper';
 
 interface SidebarDocumentButtonProps {
   name: string;
@@ -36,44 +34,40 @@ const SidebarDocumentButton = ({
     <Collapsible>
       <SidebarMenuItem key={name}>
         <SidebarMenuButton
+          asChild
           className={cn(
             buttonVariants({ variant: 'ghost' }),
-            'group/collapsible flex items-center justify-between px-2 text-muted-foreground [&_svg]:size-5 [&_svg]:shrink-0'
+            'group/item flex w-full items-center justify-between px-2 text-muted-foreground hover:bg-muted/50'
           )}
         >
-          <div className="flex items-center gap-2">
-            <CollapsibleTrigger asChild className="group/collapsible">
-              <Button
-                variant="ghost"
-                className="relative flex h-6 w-6 items-center justify-center px-0 hover:bg-primary/5"
-              >
-                <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-200 group-hover/collapsible:opacity-0 [&>svg]:size-6">
-                  {icon}
-                </div>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-all duration-200 group-hover/collapsible:opacity-100">
-                  <ArrowRight01Icon className="size-5 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                </div>
-              </Button>
-            </CollapsibleTrigger>
-            <span className="text-sm">{name}</span>
-          </div>
-          <div className="hidden gap-1 group-hover/collapsible:flex">
-            <Button
-              variant="ghost"
-              className="relative flex h-6 w-6 items-center justify-center px-0 hover:bg-primary/5"
-            >
-              <MoreHorizontalIcon className="size-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              className="relative flex h-6 w-6 items-center justify-center px-0 hover:bg-primary/5"
-            >
-              <Add01Icon className="size-4" />
-            </Button>
-          </div>
+          <a href={url} className="flex w-full items-center justify-between">
+            <div className="flex items-center gap-2">
+              <CollapsibleTrigger asChild>
+                <IconWrapper className="group/trigger">
+                  <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-200 group-hover/trigger:opacity-0">
+                    {icon}
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover/trigger:opacity-100">
+                    <ArrowRight01Icon className="size-5 transition-transform duration-200 group-data-[state=open]/trigger:rotate-90" />
+                  </div>
+                </IconWrapper>
+              </CollapsibleTrigger>
+              <span className="text-sm">{name}</span>
+            </div>
+
+            <div className="hidden gap-1 group-hover/item:flex">
+              <IconWrapper tooltip="More options">
+                <MoreHorizontalIcon className="size-4" />
+              </IconWrapper>
+              <IconWrapper tooltip="Add page inside">
+                <Add01Icon className="size-4" />
+              </IconWrapper>
+            </div>
+          </a>
         </SidebarMenuButton>
-        <AnimatePresence initial={false}>
-          <CollapsibleContent>
+
+        <CollapsibleContent>
+          <AnimatePresence initial={false}>
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
@@ -81,15 +75,15 @@ const SidebarDocumentButton = ({
               transition={{ duration: 0.2 }}
             >
               <SidebarMenuSub>
-                <div className="flex items-center gap-2 text-sm">
+                <div className="flex items-center gap-2 py-1 text-sm">
                   <span className="text-muted-foreground/50">
                     No pages found
                   </span>
                 </div>
               </SidebarMenuSub>
             </motion.div>
-          </CollapsibleContent>
-        </AnimatePresence>
+          </AnimatePresence>
+        </CollapsibleContent>
       </SidebarMenuItem>
     </Collapsible>
   );

@@ -7,7 +7,10 @@ import {
   WORKSPACE_NAV,
 } from '@/lib/constants/navigation';
 import { useOrganization, useUser } from '@interiorly/auth/client';
-import { Button } from '@interiorly/design-system/components/ui/button';
+import {
+  Button,
+  buttonVariants,
+} from '@interiorly/design-system/components/ui/button';
 import { Separator } from '@interiorly/design-system/components/ui/separator';
 import {
   Sidebar,
@@ -25,6 +28,7 @@ import {
 } from '@interiorly/design-system/components/ui/sidebar';
 import { cn } from '@interiorly/design-system/lib/utils';
 import {
+  Add01Icon,
   HelpCircleIcon,
   PencilEdit02Icon,
   SearchList01Icon,
@@ -133,7 +137,17 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
             </SidebarMenu>
           </SidebarGroup>
           <SidebarGroup className="group group-data-[collapsible=icon]:hidden">
-            <SidebarGroupLabel>Documents</SidebarGroupLabel>
+            <SidebarGroupLabel className="group/documents justify-between">
+              Documents
+              <div
+                className={cn(
+                  buttonVariants({ variant: 'ghost', size: 'icon' }),
+                  'h-6 w-6 opacity-0 transition-opacity group-hover/documents:opacity-100 group-hover:opacity-100 [&_svg]:size-4 [&_svg]:shrink-0'
+                )}
+              >
+                <Add01Icon className="size-4" />
+              </div>
+            </SidebarGroupLabel>
             <SidebarMenu>
               {EXAMPLE_PAGES.map((item) => (
                 <SidebarDocumentButton
