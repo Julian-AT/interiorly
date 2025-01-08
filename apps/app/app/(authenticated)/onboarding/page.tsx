@@ -1,22 +1,36 @@
 'use client';
 
 import { useOrganization, useOrganizationList } from '@interiorly/auth/client';
+import { Loading03Icon } from 'hugeicons-react';
 import { redirect } from 'next/navigation';
 
 const OnboardingPage = () => {
-  const { organization } = useOrganization();
-  const { setActive, userMemberships } = useOrganizationList({
+  const { organization, isLoaded: isLoadedOrg } = useOrganization();
+  const {
+    setActive,
+    userMemberships,
+    isLoaded: isLoadedOrgList,
+  } = useOrganizationList({
     userMemberships: true,
   });
 
-  if (!organization) {
-    if (setActive && userMemberships.count > 0) {
-      const newOrg = userMemberships.data[0].organization;
-      setActive({ organization: newOrg.id });
-      return redirect('/');
-    }
+  if (!isLoadedOrg || !isLoadedOrgList) {
+    return (
+      <div className="flex h-screen items-center justify-center gap-4">
+        <Loading03Icon className="animate-spin" />
+        <span className="text-muted-foreground">Getting things ready...</span>
+      </div>
+    );
+  }
 
-    return redirect('/onboarding');
+  if (organization) {
+    return redirect('/');
+  }
+
+  if (setActive && userMemberships.count > 0) {
+    const newOrg = userMemberships.data[0].organization;
+    setActive({ organization: newOrg.id });
+    return redirect('/');
   }
 
   return (
