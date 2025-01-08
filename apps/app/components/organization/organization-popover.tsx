@@ -115,7 +115,7 @@ export const OrganizationPopover = () => {
                   </DialogTitle>
                   <OrganizationProfile
                     routing="hash"
-                    afterLeaveOrganizationUrl="/"
+                    afterLeaveOrganizationUrl="/onboarding"
                   />
                 </DialogContent>
               </Dialog>
