@@ -65,7 +65,7 @@
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.1.0",
     "@types/node": "22.10.2",
-    "@types/react": "19.0.2",
+    "@types/react": "19.0.6",
     "@types/react-dom": "19.0.2",
     "jsdom": "^25.0.1",
     "tailwindcss": "^3.4.17",
