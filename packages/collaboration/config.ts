@@ -1,5 +1,5 @@
 import { LiveMap, LiveObject } from "@liveblocks/client";
-import { Document, User } from "@/types";
+import { Document, User } from "./types";
 
 export type Note = LiveObject<{
   x: number;

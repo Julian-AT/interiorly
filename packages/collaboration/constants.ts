@@ -1,4 +1,4 @@
-import type { DocumentType } from '@/types';
+import type { DocumentType } from './types';
 
 export const DASHBOARD_URL = '/';
 export const DASHBOARD_DRAFTS_URL = `${DASHBOARD_URL}/drafts`;

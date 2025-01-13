@@ -65,6 +65,8 @@ export function buildDocument(room: RoomInfo): Document {
 
   // Return our custom Document format
   return {
+    coverImageUrl: null,
+    icon: null,
     id: room.id,
     created,
     lastConnection,
