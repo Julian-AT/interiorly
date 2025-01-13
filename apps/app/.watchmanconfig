@@ -1,0 +1,3 @@
+{
+  "ignore_dirs": [".git", ".next", "node_modules", "DumpStack.log.tmp"]
+}

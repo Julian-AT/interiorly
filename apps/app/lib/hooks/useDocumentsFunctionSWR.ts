@@ -1,4 +1,6 @@
-import useSWR, { SWRConfiguration } from "swr";
+'use client';
+
+import useSWR, { type SWRConfiguration } from 'swr';
 
 /**
  * Custom `useSWR` hook that takes server actions from `/lib/actions`
@@ -11,6 +13,8 @@ import useSWR, { SWRConfiguration } from "swr";
  * @param documentActionAndArgs - A tuple containing the server action, and the argument to pass
  * @param swrOptions - SWR configuration
  */
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function useDocumentsFunctionSWR<T extends (...args: any) => any>(
   documentActionAndArgs: [T | null, Parameters<T> | Parameters<T>[0]],
   swrOptions: SWRConfiguration = {}
@@ -26,7 +30,7 @@ export function useDocumentsFunctionSWR<T extends (...args: any) => any>(
     return data;
   };
 
-  return useSWR<Awaited<ReturnType<T>>["data"]>(
+  return useSWR<Awaited<ReturnType<T>>['data']>(
     [...documentActionAndArgs],
     fetcher,
     swrOptions

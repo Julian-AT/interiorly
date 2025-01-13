@@ -1,12 +1,13 @@
-"use server";
+'use server';
 
-import { auth } from "@/auth";
-import { userAllowedInRoom } from "@/lib/utils";
-import { liveblocks } from "@/liveblocks.server.config";
-import { Document } from "@/types";
+import { userAllowedInRoom } from '@/lib/utils';
+import { auth, currentUser } from '@interiorly/auth/server';
+import { liveblocks } from '@interiorly/collaboration/liveblocks.server.config';
+import type { Document } from '@interiorly/collaboration/types/document';
+import type { RoomData } from '@liveblocks/node';
 
 type Props = {
-  documentId: Document["id"];
+  documentId: Document['id'];
 };
 
 /**
@@ -18,20 +19,27 @@ type Props = {
  * @param documentId - The document's id
  */
 export async function deleteDocument({ documentId }: Props) {
-  let session;
-  let room;
+  const user = await currentUser();
+  const { orgId } = await auth();
+
+  if (!user || !orgId) {
+    return {
+      error: {
+        code: 401,
+        message: 'Not signed in',
+        suggestion: 'Sign in to get a document',
+      },
+    };
+  }
+  let room: RoomData;
   try {
-    // Get session and room
-    const result = await Promise.all([auth(), liveblocks.getRoom(documentId)]);
-    session = result[0];
-    room = result[1];
+    room = await liveblocks.getRoom(documentId);
   } catch (err) {
-    console.error(err);
     return {
       error: {
         code: 500,
-        message: "Error fetching document",
-        suggestion: "Refresh the page and try again",
+        message: 'Error fetching document',
+        suggestion: 'Refresh the page and try again',
       },
     };
   }
@@ -40,25 +48,25 @@ export async function deleteDocument({ documentId }: Props) {
     return {
       error: {
         code: 404,
-        message: "Document not found",
+        message: 'Document not found',
         suggestion: "Check that you're on the correct page",
       },
     };
   }
 
-  // Check current user has write access on the room (if not logged in, use empty values)
   if (
     !userAllowedInRoom({
-      accessAllowed: "write",
-      userId: session?.user.info.id ?? "",
-      groupIds: session?.user.info.groupIds ?? [],
+      accessAllowed: 'write',
+      userId: user.id,
+      groupIds: [],
       room,
     })
   ) {
+    // Check current user has write access on the room (if not logged in, use empty values)
     return {
       error: {
         code: 403,
-        message: "Not allowed access",
+        message: 'Not allowed access',
         suggestion: "Check that you've been given permission to the room",
       },
     };
@@ -72,7 +80,7 @@ export async function deleteDocument({ documentId }: Props) {
       error: {
         code: 401,
         message: "Can't delete the room",
-        suggestion: "Please try again",
+        suggestion: 'Please try again',
       },
     };
   }

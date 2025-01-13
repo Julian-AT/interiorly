@@ -1,16 +1,17 @@
-"use server";
+'use server';
 
-import { auth } from "@/auth";
 import {
   buildDocument,
   documentAccessToRoomAccesses,
   userAllowedInRoom,
-} from "@/lib/utils";
-import { liveblocks } from "@/liveblocks.server.config";
-import { Document, DocumentAccess } from "@/types";
+} from '@/lib/utils';
+import { auth } from '@interiorly/auth/server';
+import { liveblocks } from '@interiorly/collaboration/liveblocks.server.config';
+import type { Document, DocumentAccess } from '@interiorly/collaboration/types';
+import type { RoomData } from '@liveblocks/node';
 
 type Props = {
-  documentId: Document["id"];
+  documentId: Document['id'];
   access: DocumentAccess;
 };
 
@@ -24,31 +25,28 @@ type Props = {
  * @param access - The new DocumentAccess permission level
  */
 export async function updateDefaultAccess({ documentId, access }: Props) {
-  let session;
-  let room;
+  const user = await auth();
+
+  if (!user || !user.userId || !user.orgId) {
+    return {
+      error: {
+        code: 401,
+        message: 'Not authenticated',
+        suggestion: 'Please sign in',
+      },
+    };
+  }
+
+  let room: RoomData | null;
   try {
-    // Get session and room
-    const result = await Promise.all([auth(), liveblocks.getRoom(documentId)]);
-    session = result[0];
-    room = result[1];
+    room = await liveblocks.getRoom(documentId);
   } catch (err) {
     console.error(err);
     return {
       error: {
         code: 500,
-        message: "Error fetching document",
-        suggestion: "Refresh the page and try again",
-      },
-    };
-  }
-
-  // Check user is logged in
-  if (!session) {
-    return {
-      error: {
-        code: 401,
-        message: "Not signed in",
-        suggestion: "Sign in to update public access level",
+        message: 'Error fetching document',
+        suggestion: 'Refresh the page and try again',
       },
     };
   }
@@ -57,7 +55,7 @@ export async function updateDefaultAccess({ documentId, access }: Props) {
     return {
       error: {
         code: 404,
-        message: "Document not found",
+        message: 'Document not found',
         suggestion: "Check that you're on the correct page",
       },
     };
@@ -66,16 +64,16 @@ export async function updateDefaultAccess({ documentId, access }: Props) {
   // Check current logged-in user has write access to the room
   if (
     !userAllowedInRoom({
-      accessAllowed: "write",
-      userId: session.user.info.id,
-      groupIds: session.user.info.groupIds,
+      accessAllowed: 'write',
+      userId: user.userId,
+      groupIds: [],
       room,
     })
   ) {
     return {
       error: {
         code: 403,
-        message: "Not allowed access",
+        message: 'Not allowed access',
         suggestion: "Check that you've been given permission to the room",
       },
     };
@@ -85,7 +83,7 @@ export async function updateDefaultAccess({ documentId, access }: Props) {
   const defaultAccesses = documentAccessToRoomAccesses(access);
 
   // Update the room with the new collaborators
-  let updatedRoom;
+  let updatedRoom: RoomData | null;
   try {
     updatedRoom = await liveblocks.updateRoom(documentId, {
       defaultAccesses,
@@ -95,7 +93,7 @@ export async function updateDefaultAccess({ documentId, access }: Props) {
       error: {
         code: 401,
         message: "Can't edit default access level in room",
-        suggestion: "Please refresh the page and try again",
+        suggestion: 'Please refresh the page and try again',
       },
     };
   }
@@ -104,8 +102,8 @@ export async function updateDefaultAccess({ documentId, access }: Props) {
     return {
       error: {
         code: 404,
-        message: "Updated room not found",
-        suggestion: "Contact an administrator",
+        message: 'Updated room not found',
+        suggestion: 'Contact an administrator',
       },
     };
   }

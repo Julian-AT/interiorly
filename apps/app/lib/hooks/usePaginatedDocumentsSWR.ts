@@ -1,12 +1,14 @@
-import { useState } from "react";
-import { SWRConfiguration } from "swr";
-import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite";
+'use client';
+
 import {
   type GetDocumentsProps,
   type GetDocumentsResponse,
   getDocuments,
   getNextDocuments,
-} from "@/lib/actions";
+} from '@/lib/actions';
+import { useState } from 'react';
+import type { SWRConfiguration } from 'swr';
+import useSWRInfinite, { type SWRInfiniteKeyLoader } from 'swr/infinite';
 
 /**
  * Takes a documentsOptions object and returns a list of paginatable rooms
@@ -46,6 +48,7 @@ export function usePaginatedDocumentsSWR(
     return [getNextDocuments, { nextCursor: previousPageData.nextCursor }];
   };
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const fetcher = async <T extends (...args: any) => any>([func, ...args]: [
     T,
     Parameters<T>[],
@@ -71,7 +74,7 @@ export function usePaginatedDocumentsSWR(
   const isLoadingInitialData = !data && !error;
   const isLoadingMore =
     isLoadingInitialData ||
-    (size > 0 && data && typeof data[size - 1] === "undefined");
+    (size > 0 && data && typeof data[size - 1] === 'undefined');
   const isEmpty = data?.[0]?.documents.length === 0;
   const isReachingEnd =
     isEmpty ||

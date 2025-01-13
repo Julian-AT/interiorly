@@ -2,6 +2,8 @@ import '@interiorly/design-system/styles/globals.css';
 import { DesignSystemProvider } from '@interiorly/design-system';
 import { fonts } from '@interiorly/design-system/lib/fonts';
 import { Toolbar } from '@interiorly/feature-flags/components/toolbar';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { ReactNode } from 'react';
 
 type RootLayoutProperties = {
@@ -80,6 +82,8 @@ const RootLayout = ({ children }: RootLayoutProperties) => (
     <body>
       <DesignSystemProvider>{children}</DesignSystemProvider>
       <Toolbar />
+      <SpeedInsights />
+      <Analytics />
     </body>
   </html>
 );

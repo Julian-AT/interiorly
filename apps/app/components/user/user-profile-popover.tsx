@@ -70,7 +70,7 @@ export const UserProfilePopover = () => {
             <span className="truncate text-foreground text-sm">
               {user.fullName || user.username}
             </span>
-            <span className="truncate text-muted-foreground text-xs">
+            <span className="overflow-hidden truncate truncate text-muted-foreground text-xs">
               {user.emailAddresses[0].emailAddress}
             </span>
           </div>

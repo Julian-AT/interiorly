@@ -39,7 +39,7 @@ export const AvatarStack = () => {
   const hasMoreUsers = others.length > 3;
 
   return (
-    <div className="-space-x-1 flex items-center px-4">
+    <div className="-space-x-1 flex items-center px-1">
       {others.slice(0, 3).map(({ connectionId, info }) => (
         <PresenceAvatar key={connectionId} info={info} />
       ))}
@@ -48,6 +48,7 @@ export const AvatarStack = () => {
         <PresenceAvatar
           info={{
             name: `+${others.length - 3}`,
+            avatar: '',
             color: tailwind.theme.colors.gray[500],
           }}
         />

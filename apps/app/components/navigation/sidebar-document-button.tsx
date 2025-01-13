@@ -23,12 +23,14 @@ interface SidebarDocumentButtonProps {
   name: string;
   url: string;
   icon: React.ReactNode;
+  className?: string;
 }
 
 const SidebarDocumentButton = ({
   name,
   url,
   icon,
+  className,
 }: SidebarDocumentButtonProps) => {
   return (
     <Collapsible>
@@ -37,7 +39,8 @@ const SidebarDocumentButton = ({
           asChild
           className={cn(
             buttonVariants({ variant: 'ghost' }),
-            'group/item flex w-full items-center justify-between px-2 text-muted-foreground hover:bg-muted/50'
+            'group/item flex w-full items-center justify-between px-2 text-muted-foreground hover:bg-muted',
+            className
           )}
         >
           <a href={url} className="flex w-full items-center justify-between">

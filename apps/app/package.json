@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.9.1",
     "@interiorly/analytics": "workspace:*",
     "@interiorly/auth": "workspace:*",
     "@interiorly/collaboration": "workspace:*",
@@ -24,6 +25,7 @@
     "@interiorly/tailwind-config": "workspace:*",
     "@interiorly/webhooks": "workspace:*",
     "@liveblocks/node": "^2.15.1",
+    "@liveblocks/react": "^2.15.1",
     "@liveblocks/react-tiptap": "^2.15.1",
     "@prisma/client": "6.1.0",
     "@sentry/nextjs": "^8.47.0",
@@ -38,9 +40,12 @@
     "@tiptap/extension-youtube": "^2.11.0",
     "@tiptap/react": "^2.11.0",
     "@tiptap/starter-kit": "^2.11.0",
+    "@vercel/analytics": "^1.4.1",
+    "@vercel/speed-insights": "^1.1.0",
     "fuse.js": "^7.0.0",
     "hugeicons-react": "^0.3.0",
     "import-in-the-middle": "^1.12.0",
+    "moment": "^2.30.1",
     "motion": "^11.15.0",
     "nanoid": "^5.0.9",
     "next": "15.1.3",
@@ -48,7 +53,9 @@
     "prosemirror-view": "^1.37.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-hook-form": "^7.54.2",
     "require-in-the-middle": "^7.4.0",
+    "swr": "^2.3.0",
     "zod": "^3.24.1",
     "zustand": "^5.0.2"
   },

@@ -1,12 +1,16 @@
-"use server";
+'use server';
 
-import { auth } from "@/auth";
-import { buildDocumentUsers } from "@/lib/utils";
-import { liveblocks } from "@/liveblocks.server.config";
-import { Document, DocumentUser } from "@/types";
+import { buildDocumentUsers } from '@/lib/utils';
+import { currentUser } from '@interiorly/auth/server';
+import { liveblocks } from '@interiorly/collaboration/liveblocks.server.config';
+import type {
+  Document,
+  DocumentUser,
+} from '@interiorly/collaboration/types/document';
+import type { RoomData } from '@liveblocks/node';
 
 type Props = {
-  documentId: Document["id"];
+  documentId: Document['id'];
 };
 
 /**
@@ -18,20 +22,29 @@ type Props = {
  * @param documentId - The document id
  */
 export async function getDocumentUsers({ documentId }: Props) {
-  let session;
-  let room;
+  const user = await currentUser();
+
+  if (!user || user.banned) {
+    return {
+      error: {
+        code: 401,
+        message: 'Not signed in',
+        suggestion: 'Sign in to get a document',
+      },
+    };
+  }
+
+  let room: RoomData;
   try {
     // Get session and room
-    const result = await Promise.all([auth(), liveblocks.getRoom(documentId)]);
-    session = result[0];
-    room = result[1];
+    room = await liveblocks.getRoom(documentId);
   } catch (err) {
     console.error(err);
     return {
       error: {
         code: 500,
-        message: "Error fetching document",
-        suggestion: "Refresh the page and try again",
+        message: 'Error fetching document',
+        suggestion: 'Refresh the page and try again',
       },
     };
   }
@@ -40,16 +53,13 @@ export async function getDocumentUsers({ documentId }: Props) {
     return {
       error: {
         code: 404,
-        message: "Document not found",
+        message: 'Document not found',
         suggestion: "Check that you're on the correct page",
       },
     };
   }
 
   // If successful, convert room to a list of groups and send
-  const result: DocumentUser[] = await buildDocumentUsers(
-    room,
-    session?.user.info.id ?? ""
-  );
+  const result: DocumentUser[] = await buildDocumentUsers(room, user.id);
   return { data: result };
 }

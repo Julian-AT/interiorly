@@ -1,4 +1,4 @@
-import { Group, User } from "./data";
+import type { Group, User } from './data';
 
 /**
  * This is the main type of your Documents.
@@ -6,32 +6,19 @@ import { Group, User } from "./data";
  * properties.
  */
 export type Document = {
-  // Equivalent to Liveblocks room id
   id: string;
-
-  // The document's name
   name: string;
-
-  // Arrays containing access levels
   accesses: DocumentAccesses;
-
-  // The user if of the document's creator
-  owner: DocumentUser["id"];
-
-  // When the document was created (Date.toString())
+  owner: DocumentUser['id'];
+  icon: string | null;
+  coverImageUrl: string | null;
   created: string;
-
-  // When the last user connected (Date.toString())
   lastConnection: string;
-
-  // If the room is a draft (which has no groups or public access) or not
   draft: boolean;
-
-  // The type of document e.g. "canvas"
   type: DocumentType;
 };
 
-export type DocumentType = "text" | "whiteboard" | "canvas";
+export type DocumentType = 'text' | 'whiteboard' | 'canvas';
 
 export type DocumentGroup = Group & {
   access: DocumentAccess;
@@ -44,31 +31,30 @@ export type DocumentUser = User & {
 
 export enum DocumentAccess {
   // Can edit, read, and modify invited users
-  FULL = "full",
+  FULL = 'full',
 
   // Can edit and read the document
-  EDIT = "edit",
+  EDIT = 'edit',
 
   // Can only read the document
-  READONLY = "readonly",
+  READONLY = 'readonly',
 
   // Can't view the document
-  NONE = "none",
+  NONE = 'none',
 }
 
 export type DocumentAccesses = {
   default: DocumentAccess;
-  groups: Record<DocumentGroup["id"], DocumentAccess>;
-  users: Record<DocumentUser["id"], DocumentAccess>;
+  groups: Record<DocumentGroup['id'], DocumentAccess>;
+  users: Record<DocumentUser['id'], DocumentAccess>;
 };
 
 // Room metadata used when creating a new document
 export interface DocumentRoomMetadata
   extends Record<string, string | string[]> {
-  name: Document["name"];
+  name: Document['name'];
   type: DocumentType;
-  owner: User["id"];
-  draft: "yes" | "no";
+  owner: User['id'];
 }
 
 export type ErrorData = {

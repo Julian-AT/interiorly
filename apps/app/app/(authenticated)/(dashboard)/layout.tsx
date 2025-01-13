@@ -4,15 +4,8 @@ import { GlobalSidebar } from '@/components/navigation/sidebar';
 import { env } from '@/env';
 import { auth } from '@interiorly/auth/server';
 import { SidebarProvider } from '@interiorly/design-system/components/ui/sidebar';
-import dynamic from 'next/dynamic';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
-
-const CollaborationProvider = dynamic(() =>
-  import('@/components/provider/collaboration-provider').then(
-    (mod) => mod.CollaborationProvider
-  )
-);
 
 type AppLayoutProperties = {
   readonly children: ReactNode;

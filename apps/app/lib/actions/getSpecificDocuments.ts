@@ -1,10 +1,10 @@
-"use server";
+'use server';
 
-import { Document } from "@/types";
-import { getDocument } from "./getDocument";
+import { getDocument } from '@/lib/actions/getDocument';
+import type { Document } from '@interiorly/collaboration/types';
 
 type Props = {
-  documentIds: Document["id"][];
+  documentIds: Document['id'][];
 };
 
 /**
@@ -26,7 +26,7 @@ export async function getSpecificDocuments({ documentIds }: Props) {
   // If an error occurs when fetching a document, replace it with `null` instead
   const documents = [];
   for (const result of documentResults) {
-    if (result.status === "fulfilled") {
+    if (result.status === 'fulfilled') {
       if (result.value.error) {
         console.error(result.value.error);
         documents.push(null);
@@ -34,7 +34,7 @@ export async function getSpecificDocuments({ documentIds }: Props) {
         documents.push(result.value.data);
       }
     } else {
-      console.error("Problem fetching documents by ID");
+      console.error('Problem fetching documents by ID');
       documents.push(null);
     }
   }

@@ -1,5 +1,4 @@
 'use client';
-
 import { Button } from '@interiorly/design-system/components/ui/button';
 import { fonts } from '@interiorly/design-system/lib/fonts';
 import { captureException } from '@sentry/nextjs';

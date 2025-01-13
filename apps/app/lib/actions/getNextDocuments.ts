@@ -1,9 +1,10 @@
-"use server";
+'use server';
 
-import { auth } from "@/auth";
-import { GetDocumentsResponse } from "@/lib/actions/getDocuments";
-import { buildDocuments, userAllowedInRoom } from "@/lib/utils";
-import { liveblocks } from "@/liveblocks.server.config";
+import type { GetDocumentsResponse } from '@/lib/actions/getDocuments';
+import { buildDocuments, userAllowedInRoom } from '@/lib/utils';
+import { currentUser } from '@interiorly/auth/server';
+import { liveblocks } from '@interiorly/collaboration/liveblocks.server.config';
+import type { RoomData } from '@liveblocks/node';
 
 type Props = {
   nextCursor: string;
@@ -19,34 +20,33 @@ type Props = {
  * @param nextPage - nextPage, retrieved from getDocumentByGroup
  */
 export async function getNextDocuments({ nextCursor }: Props) {
-  let session;
-  let getRoomsResponse;
+  const user = await currentUser();
+
+  if (!user || user.banned) {
+    return {
+      error: {
+        code: 401,
+        message: 'Not signed in',
+        suggestion: 'Sign in to get a document',
+      },
+    };
+  }
+
+  let getRoomsResponse: {
+    nextPage: string | null;
+    nextCursor: string | null;
+    data: RoomData[];
+  };
   try {
     // Get session and rooms
-    const result = await Promise.all([
-      auth(),
-      liveblocks.getRooms({ startingAfter: nextCursor }),
-    ]);
-    session = result[0];
-    getRoomsResponse = result[1];
+    getRoomsResponse = await liveblocks.getRooms({ startingAfter: nextCursor });
   } catch (err) {
     console.log(err);
     return {
       error: {
         code: 500,
-        message: "Error fetching rooms",
-        suggestion: "Refresh the page and try again",
-      },
-    };
-  }
-
-  // Check user is logged in
-  if (!session) {
-    return {
-      error: {
-        code: 401,
-        message: "Not signed in",
-        suggestion: "Sign in to get documents",
+        message: 'Error fetching rooms',
+        suggestion: 'Refresh the page and try again',
       },
     };
   }
@@ -57,8 +57,8 @@ export async function getNextDocuments({ nextCursor }: Props) {
     return {
       error: {
         code: 404,
-        message: "No more rooms found",
-        suggestion: "No more rooms to paginate",
+        message: 'No more rooms found',
+        suggestion: 'No more rooms to paginate',
       },
     };
   }
@@ -68,9 +68,9 @@ export async function getNextDocuments({ nextCursor }: Props) {
   for (const room of rooms) {
     if (
       userAllowedInRoom({
-        accessAllowed: "read",
-        userId: session.user.info.id,
-        groupIds: session.user.info.groupIds,
+        accessAllowed: 'read',
+        userId: user.id,
+        groupIds: [],
         room: room,
       })
     ) {

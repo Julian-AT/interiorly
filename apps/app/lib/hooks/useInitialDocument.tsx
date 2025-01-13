@@ -1,7 +1,7 @@
-import { ReactNode, createContext, useContext } from "react";
-import { Document } from "@/types";
+import type { Document } from '@interiorly/collaboration/types';
+import { type ReactNode, createContext, useContext } from 'react';
 
-const DocumentContext = createContext<Document | null>(null);
+const DocumentContext = createContext<Document | undefined>(undefined);
 
 type Props = {
   initialDocument: Document;
@@ -20,7 +20,9 @@ export function useInitialDocument() {
   const document = useContext(DocumentContext);
 
   if (!document) {
-    throw Error("No document passed to DocumentProvider");
+    throw new Error(
+      'useInitialDocument must be used within an InitialDocumentProvider'
+    );
   }
 
   return document;

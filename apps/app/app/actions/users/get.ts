@@ -71,7 +71,7 @@ export const getUsers = async (
       )
       .map((user) => ({
         name: getName(user) ?? 'Unknown user',
-        picture: user.publicUserData?.imageUrl ?? '',
+        avatar: user.publicUserData?.imageUrl ?? '',
         color: colors[Math.floor(Math.random() * colors.length)],
       }));
 

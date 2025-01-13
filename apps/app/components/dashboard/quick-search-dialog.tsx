@@ -2,6 +2,9 @@
 
 import * as React from 'react';
 
+import { getDocuments } from '@/lib/actions';
+import { useDocumentsFunctionSWR } from '@/lib/hooks';
+import type { Document } from '@interiorly/collaboration/types';
 import {
   CommandDialog,
   CommandEmpty,
@@ -27,6 +30,17 @@ interface QuickSearchProps {
 
 export function QuickSearch({ children }: QuickSearchProps) {
   const [open, setOpen] = React.useState(false);
+  const { data } = useDocumentsFunctionSWR(
+    [
+      getDocuments,
+      {
+        limit: 10,
+      },
+    ],
+    {
+      revalidateOnFocus: false,
+    }
+  );
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -50,6 +64,21 @@ export function QuickSearch({ children }: QuickSearchProps) {
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandSeparator />
+          {data?.documents && (
+            <CommandGroup heading="Documents">
+              {data.documents.map((document: Document) => (
+                <CommandItem
+                  key={document.id}
+                  className="flex items-center justify-between"
+                >
+                  <span key={document.id}>
+                    {document.icon} {document.name}
+                    <div className="hidden">{document.id}</div>
+                  </span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          )}
           <CommandGroup heading="Workspace" className="text-muted-foreground">
             <Link href="/">
               <CommandItem>

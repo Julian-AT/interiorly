@@ -1,20 +1,24 @@
-"use server";
+'use server';
 
-import { auth } from "@/auth";
-import { getUser } from "@/lib/database/getUser";
 import {
   buildDocument,
   buildDocumentUsers,
   documentAccessToRoomAccesses,
   isUserDocumentOwner,
   userAllowedInRoom,
-} from "@/lib/utils";
-import { liveblocks } from "@/liveblocks.server.config";
-import { Document, DocumentAccess, DocumentUser } from "@/types";
+} from '@/lib/utils';
+import { auth } from '@interiorly/auth/server';
+import { liveblocks } from '@interiorly/collaboration/liveblocks.server.config';
+import {
+  type Document,
+  DocumentAccess,
+  type DocumentUser,
+} from '@interiorly/collaboration/types';
+import type { RoomData } from '@liveblocks/node';
 
 type Props = {
-  userId: DocumentUser["id"];
-  documentId: Document["id"];
+  userId: DocumentUser['id'];
+  documentId: Document['id'];
   access: DocumentAccess;
 };
 
@@ -29,47 +33,35 @@ type Props = {
  * @param access - The access level of the user
  */
 export async function updateUserAccess({ userId, documentId, access }: Props) {
-  let session;
-  let room;
-  let user;
-  try {
-    // Get session and room
-    const result = await Promise.all([
-      auth(),
-      liveblocks.getRoom(documentId),
-      getUser(userId),
-    ]);
-    session = result[0];
-    room = result[1];
-    user = result[2];
-  } catch (err) {
-    console.error(err);
-    return {
-      error: {
-        code: 500,
-        message: "Error fetching document",
-        suggestion: "Refresh the page and try again",
-      },
-    };
-  }
+  const user = await auth();
 
-  // Check user is logged in
-  if (!session) {
+  if (!user || !user.userId || !user.orgId) {
     return {
       error: {
         code: 401,
-        message: "Not signed in",
-        suggestion: "Sign in to remove a user",
+        message: 'Not authenticated',
+        suggestion: 'Please sign in',
       },
     };
   }
 
-  // Check current logged-in user is set as a user with id, ignoring groupIds and default access
+  const room = await liveblocks.getRoom(documentId);
+
+  if (!room) {
+    return {
+      error: {
+        code: 404,
+        message: 'Document not found',
+        suggestion: 'Check that you are on the correct page',
+      },
+    };
+  }
+
   if (
     !userAllowedInRoom({
-      accessAllowed: "write",
-      checkAccessLevel: "user",
-      userId: session.user.info.id,
+      accessAllowed: 'write',
+      checkAccessLevel: 'user',
+      userId: user.userId,
       groupIds: [],
       room,
     })
@@ -77,18 +69,17 @@ export async function updateUserAccess({ userId, documentId, access }: Props) {
     return {
       error: {
         code: 403,
-        message: "Not allowed access",
+        message: 'Not allowed access',
         suggestion: "Check that you've been given permission to the document",
       },
     };
   }
 
-  // Check the room `documentId` exists
   if (!room) {
     return {
       error: {
         code: 404,
-        message: "Document not found",
+        message: 'Document not found',
         suggestion: "Check that you're on the correct page",
       },
     };
@@ -101,7 +92,7 @@ export async function updateUserAccess({ userId, documentId, access }: Props) {
     return {
       error: {
         code: 400,
-        message: "User not found",
+        message: 'User not found',
         suggestion: "Check that you've used the correct user id",
       },
     };
@@ -112,7 +103,7 @@ export async function updateUserAccess({ userId, documentId, access }: Props) {
     return {
       error: {
         code: 400,
-        message: "User is owner",
+        message: 'User is owner',
         suggestion: `User ${userId} is the document owner and cannot be edited`,
       },
     };
@@ -122,13 +113,13 @@ export async function updateUserAccess({ userId, documentId, access }: Props) {
   const userAccess = documentAccessToRoomAccesses(access);
   const usersAccesses: Record<
     string,
-    ["room:write"] | ["room:read", "room:presence:write"] | null
+    ['room:write'] | ['room:read', 'room:presence:write'] | null
   > = {
     [userId]: userAccess.length === 0 ? null : userAccess,
   };
 
   // Send userAccesses to room and remove user
-  let updatedRoom;
+  let updatedRoom: RoomData | null;
   try {
     updatedRoom = await liveblocks.updateRoom(documentId, {
       usersAccesses,
@@ -138,7 +129,7 @@ export async function updateUserAccess({ userId, documentId, access }: Props) {
       error: {
         code: 401,
         message: "Can't remove user from room",
-        suggestion: "Please refresh the page and try again",
+        suggestion: 'Please refresh the page and try again',
       },
     };
   }
@@ -147,8 +138,8 @@ export async function updateUserAccess({ userId, documentId, access }: Props) {
     return {
       error: {
         code: 404,
-        message: "Updated room not found",
-        suggestion: "Contact an administrator",
+        message: 'Updated room not found',
+        suggestion: 'Contact an administrator',
       },
     };
   }
@@ -158,7 +149,7 @@ export async function updateUserAccess({ userId, documentId, access }: Props) {
   if (!previousAccessLevel || previousAccessLevel === DocumentAccess.NONE) {
     liveblocks.triggerInboxNotification({
       userId,
-      kind: "$addedToDocument",
+      kind: '$addedToDocument',
       subjectId: document.id,
       roomId: room.id,
       activityData: {
@@ -169,7 +160,7 @@ export async function updateUserAccess({ userId, documentId, access }: Props) {
 
   const result: DocumentUser[] = await buildDocumentUsers(
     updatedRoom,
-    session.user.info.id
+    user.userId
   );
   return { data: result };
 }

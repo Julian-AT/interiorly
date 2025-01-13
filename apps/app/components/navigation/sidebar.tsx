@@ -1,16 +1,11 @@
 'use client';
 import { GlobalSidebarSkeleton } from '@/components/skeletons/sidebar-skeleton';
 import { UserProfilePopover } from '@/components/user/user-profile-popover';
-import {
-  EXAMPLE_PAGES,
-  SECONDARY_NAV,
-  WORKSPACE_NAV,
-} from '@/lib/constants/navigation';
+import { createDocument, getDocuments } from '@/lib/actions';
+import { WORKSPACE_NAV } from '@/lib/constants/navigation';
+import { useDocumentsFunctionSWR } from '@/lib/hooks';
 import { useOrganization, useUser } from '@interiorly/auth/client';
-import {
-  Button,
-  buttonVariants,
-} from '@interiorly/design-system/components/ui/button';
+import { Button } from '@interiorly/design-system/components/ui/button';
 import { Separator } from '@interiorly/design-system/components/ui/separator';
 import {
   Sidebar,
@@ -29,6 +24,8 @@ import {
 import { cn } from '@interiorly/design-system/lib/utils';
 import {
   Add01Icon,
+  Delete02Icon,
+  File02Icon,
   HelpCircleIcon,
   PencilEdit02Icon,
   SearchList01Icon,
@@ -36,11 +33,13 @@ import {
 } from 'hugeicons-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { type ReactNode, useEffect } from 'react';
+import { type ReactNode, useCallback, useEffect, useMemo } from 'react';
+import CreateDocumentDialog from '../dashboard/create-document-dialog';
 import HelpPopover from '../dashboard/help-popover';
 import { QuickSearch } from '../dashboard/quick-search-dialog';
 import OrganizationInviteMembersDialog from '../organization/organization-invite-members-dialog';
 import { OrganizationPopover } from '../organization/organization-popover';
+import EditorLayoutSkeleton from '../skeletons/editor-layout-skeleton';
 import SidebarDocumentButton from './sidebar-document-button';
 
 type GlobalSidebarProperties = {
@@ -52,23 +51,132 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
   const router = useRouter();
   const { organization } = useOrganization();
   const { user } = useUser();
+  const { data, error, isLoading } = useDocumentsFunctionSWR(
+    [
+      getDocuments,
+      {
+        userId: user?.id,
+      },
+    ],
+    {
+      refreshInterval: 10000,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      revalidateOnMount: true,
+    }
+  );
 
-  useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      for (const item of WORKSPACE_NAV) {
-        if (e.key === item.command.split('+')[1] && (e.metaKey || e.ctrlKey)) {
-          e.preventDefault();
-          router.push(item.url);
-        }
+  // Memoize keyboard shortcut handler
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (!e.metaKey && !e.ctrlKey) return;
+
+      const item = WORKSPACE_NAV.find(
+        (item) =>
+          item.command && e.key === item.command.split('+')[1].toLowerCase()
+      );
+
+      if (item) {
+        e.preventDefault();
+        router.push(item.url);
       }
-    };
+    },
+    [router]
+  );
 
-    document.addEventListener('keydown', down);
-    return () => document.removeEventListener('keydown', down);
-  }, [router]);
+  // Handle keyboard shortcuts
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
 
-  if (!user || !organization) {
-    return <GlobalSidebarSkeleton />;
+  // Handle document creation
+  const handleCreateDocument = useCallback(async () => {
+    if (!user?.id || !organization?.id) return;
+
+    try {
+      const response = await createDocument(
+        {
+          name: 'Untitled Document',
+          userId: user.id,
+          type: 'text',
+          groupIds: [organization.id],
+          userAccesses: [user.id],
+        },
+        true
+      );
+
+      if (response?.data?.id) {
+        router.push(`/text/${response.data.id}`);
+      }
+    } catch (error) {
+      console.error('Failed to create document:', error);
+    }
+  }, [user?.id, router, organization?.id]);
+
+  // Memoize workspace navigation items
+  const workspaceNavItems = useMemo(
+    () =>
+      WORKSPACE_NAV.map((item) => (
+        <SidebarMenuItem key={item.title}>
+          <SidebarMenuButton
+            asChild
+            tooltip={
+              <div className="flex max-w-64 gap-2">
+                <span className="flex-1">{item.tooltip}</span>
+                {item.command && (
+                  <span className="h-max w-max rounded-md border px-1 text-muted-foreground text-xs">
+                    {item.command.includes('meta') ? '⌘' : 'Ctrl'}{' '}
+                    {item.command.split('+')[1].toUpperCase()}
+                  </span>
+                )}
+              </div>
+            }
+          >
+            <Link
+              href={item.url}
+              className={cn(
+                'flex items-center justify-between',
+                pathname === item.url && 'bg-muted'
+              )}
+            >
+              <div className="flex items-center gap-2">
+                <item.icon className="h-5 w-5" />
+                <span>{item.title}</span>
+              </div>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      )),
+    [pathname]
+  );
+
+  // Memoize document list
+  const documentList = useMemo(
+    () =>
+      data?.documents.map((document) => (
+        <SidebarDocumentButton
+          key={document.id}
+          name={document.name}
+          url={`/${document.type}/${document.id}`}
+          icon={<File02Icon className="size-5" />}
+          className={
+            pathname === `/${document.type}/${document.id}`
+              ? 'bg-muted'
+              : undefined
+          }
+        />
+      )),
+    [data?.documents, pathname]
+  );
+
+  if (isLoading || !user || !organization || !data || error) {
+    return (
+      <div className="relative flex min-h-screen w-full min-w-full">
+        <GlobalSidebarSkeleton />
+        <EditorLayoutSkeleton />
+      </div>
+    );
   }
 
   return (
@@ -89,36 +197,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
           <SidebarGroup>
             <SidebarGroupLabel>Workspace</SidebarGroupLabel>
             <SidebarMenu>
-              {WORKSPACE_NAV.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    tooltip={
-                      <div className="flex max-w-64 gap-2">
-                        <span className="flex-1">{item.tooltip}</span>
-                        {item.command && (
-                          <span className="h-max w-max rounded-md border px-1 text-muted-foreground text-xs">
-                            ⌘ {item.command.split('+')[1].toUpperCase()}
-                          </span>
-                        )}
-                      </div>
-                    }
-                  >
-                    <Link
-                      href={item.url}
-                      className={cn(
-                        'flex items-center justify-between',
-                        pathname === item.url && 'bg-muted'
-                      )}
-                    >
-                      <div className="flex items-center gap-2">
-                        <item.icon className="h-5 w-5" />
-                        <span>{item.title}</span>
-                      </div>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {workspaceNavItems}
               <QuickSearch>
                 <SidebarMenuItem>
                   <SidebarMenuButton
@@ -139,44 +218,49 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
           <SidebarGroup className="group group-data-[collapsible=icon]:hidden">
             <SidebarGroupLabel className="group/documents justify-between">
               Documents
-              <div
-                className={cn(
-                  buttonVariants({ variant: 'ghost', size: 'icon' }),
-                  'h-6 w-6 opacity-0 transition-opacity group-hover/documents:opacity-100 group-hover:opacity-100 [&_svg]:size-4 [&_svg]:shrink-0'
-                )}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-4 w-4 hover:bg-muted"
+                onClick={handleCreateDocument}
               >
                 <Add01Icon className="size-4" />
-              </div>
+              </Button>
             </SidebarGroupLabel>
-            <SidebarMenu>
-              {EXAMPLE_PAGES.map((item) => (
-                <SidebarDocumentButton
-                  key={item.name}
-                  name={item.name}
-                  url={item.url}
-                  icon={<item.icon className="h-5 w-5" />}
-                />
-              ))}
-            </SidebarMenu>
+            <SidebarMenu>{documentList}</SidebarMenu>
           </SidebarGroup>
-
           <SidebarGroup className="mt-auto">
             <SidebarGroupContent>
               <SidebarMenu>
-                {SECONDARY_NAV.map((item) => (
-                  <SidebarMenuItem key={item.title}>
+                <CreateDocumentDialog>
+                  <SidebarMenuItem>
                     <SidebarMenuButton
                       asChild
-                      tooltip={item.tooltip}
-                      className="group/collapsible [&_svg]:size-5 [&_svg]:shrink-0"
+                      tooltip={'Create a new document'}
                     >
-                      <a href={item.url} className="flex items-center gap-2">
-                        <item.icon className="size-6" />
-                        <span>{item.title}</span>
-                      </a>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="flex items-center justify-start gap-2 font-normal [&_svg]:size-5 [&_svg]:shrink-0"
+                      >
+                        <Add01Icon className="size-6" />
+                        <span>New Document</span>
+                      </Button>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                ))}
+                </CreateDocumentDialog>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild tooltip={'View deleted documents'}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center justify-start gap-2 font-normal [&_svg]:size-5 [&_svg]:shrink-0"
+                    >
+                      <Delete02Icon className="size-6" />
+                      <span>Trash</span>
+                    </Button>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
                 <HelpPopover>
                   <SidebarMenuItem>
                     <SidebarMenuButton

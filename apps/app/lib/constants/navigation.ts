@@ -1,11 +1,5 @@
 import { AiFileIcon } from '@/components/icons/ai-file-icon';
-import {
-  Add01Icon,
-  Delete02Icon,
-  File02Icon,
-  Home05Icon,
-  InboxIcon,
-} from 'hugeicons-react';
+import { Home05Icon, InboxIcon } from 'hugeicons-react';
 
 export const WORKSPACE_NAV = [
   {
@@ -30,38 +24,5 @@ export const WORKSPACE_NAV = [
     tooltip:
       'Create drafts, ask questions about your workspace and more powered by AI',
     isBeta: true,
-  },
-] as const;
-
-export const SECONDARY_NAV = [
-  {
-    title: 'New Page',
-    url: '/',
-    icon: Add01Icon,
-    tooltip: 'Create a new page',
-  },
-  {
-    title: 'Trash',
-    url: '#',
-    icon: Delete02Icon,
-    tooltip: 'View deleted pages',
-  },
-] as const;
-
-export const EXAMPLE_PAGES = [
-  {
-    name: 'Example Page 1',
-    url: '#',
-    icon: File02Icon,
-  },
-  {
-    name: 'Example Page 2',
-    url: '#',
-    icon: File02Icon,
-  },
-  {
-    name: 'Example Page 3',
-    url: '#',
-    icon: File02Icon,
   },
 ] as const;

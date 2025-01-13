@@ -1,8 +1,7 @@
 'use client';
-
-import { TextEditor } from '@/components/dashboard/editor';
-import { CollaborationProvider } from '@/components/provider/collaboration-provider';
+import { AvatarStack } from '@/components/collaboration/avatar-stack';
 import { useOrganization } from '@interiorly/auth/client';
+import type { Document } from '@interiorly/collaboration/types';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -22,25 +21,35 @@ import {
   SentIcon,
   StarIcon,
 } from 'hugeicons-react';
+import type { ReactNode } from 'react';
 
-const TestDocumentPage = () => {
+interface EditorLayoutProps {
+  document: Document;
+  children: ReactNode;
+}
+
+const EditorLayout = ({ document, children }: EditorLayoutProps) => {
   const { setOpen, open } = useSidebar();
   const { organization } = useOrganization();
-  const isIconActive = false;
 
   if (!organization) {
-    return <div>Loading...</div>;
+    return <div>No organization found. Please check your permissions.</div>;
   }
 
+  const toggleSidebar = () => setOpen(!open);
+
+  const isIconDefault = document.icon === 'document' || !document.icon;
+
   return (
-    <div className="flex min-h-screen flex-col">
-      <div className="flex h-10 items-center justify-between bg-background px-1 text-sm">
+    <div className="flex min-h-screen w-full min-w-full flex-col">
+      <header className="relative z-50 flex h-10 items-center justify-between bg-background px-1 text-sm">
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
             size="icon"
             className="h-8 w-8"
-            onClick={() => setOpen(!open)}
+            onClick={toggleSidebar}
+            aria-label={open ? 'Close sidebar' : 'Open sidebar'}
           >
             <Menu01Icon className="size-4" />
           </Button>
@@ -55,33 +64,46 @@ const TestDocumentPage = () => {
                 <LinerIcon className="-rotate-12 size-4" />
               </BreadcrumbSeparator>
               <BreadcrumbPage className="cursor-pointer">
-                <BreadcrumbLink>{organization.id}</BreadcrumbLink>
+                <BreadcrumbLink>{document.name}</BreadcrumbLink>
               </BreadcrumbPage>
             </BreadcrumbList>
           </Breadcrumb>
         </div>
         <div className="flex items-center gap-1 text-primary">
           <span className="text-muted-foreground">Edited 2m ago</span>
-          <Button variant="ghost" className="px-2" size="sm">
+          <Button variant="ghost" className="gap-2 px-2" size="sm">
             <SentIcon className="size-4" />
-            Share
+            <span>Share</span>
           </Button>
-          <Button variant="ghost" className="px-2" size="sm">
+          <Button variant="ghost" className="gap-2 px-2" size="sm">
             <Comment01Icon className="size-4" />
-            Comments
+            <span>Comments</span>
           </Button>
-          <Button variant="ghost" className="h-8 w-8 px-2" size="icon">
+          <Button
+            variant="ghost"
+            className="h-8 w-8 px-2"
+            size="icon"
+            aria-label="Star document"
+          >
             <StarIcon className="size-5" />
           </Button>
-          <Button variant="ghost" className="h-8 w-8 px-2" size="icon">
-            <MoreHorizontalSquare01Icon className="size-5 text-white" />
+          <Button
+            variant="ghost"
+            className="h-8 w-8 px-2"
+            size="icon"
+            aria-label="More options"
+          >
+            <MoreHorizontalSquare01Icon className="size-5" />
           </Button>
+          <AvatarStack />
         </div>
-      </div>
-      <div className="h-64 bg-secondary" />
-      <div className="relative mx-auto flex w-full max-w-3xl flex-1 flex-col overflow-hidden text-pretty bg-background px-8 py-16 shadow-sm">
-        {isIconActive ? (
-          <div className="-top-8 absolute left-8 h-16 w-16 rounded-lg bg-primary shadow-md" />
+      </header>
+      <div className="relative z-20 h-64 bg-secondary" />
+      <main className="relative z-30 mx-auto flex w-full max-w-3xl flex-1 flex-col overflow-hidden text-pretty bg-background px-8 py-16 shadow-sm">
+        {isIconDefault ? (
+          <div className="-top-8 absolute left-8 z-40 h-16 w-16 rounded-lg bg-muted shadow-md">
+            {document.icon}
+          </div>
         ) : (
           <Button
             variant="ghost"
@@ -93,16 +115,12 @@ const TestDocumentPage = () => {
           </Button>
         )}
         <div className="flex items-center space-x-4">
-          <h1 className="font-bold text-4xl tracking-tight">Luuhhhh Twizzy</h1>
+          <h1 className="font-bold text-4xl tracking-tight">{document.name}</h1>
         </div>
-        <div className="mt-4">
-          <CollaborationProvider orgId={organization.id}>
-            <TextEditor />
-          </CollaborationProvider>
-        </div>
-      </div>
+        <div className="mt-4">{children}</div>
+      </main>
     </div>
   );
 };
 
-export default TestDocumentPage;
+export default EditorLayout;

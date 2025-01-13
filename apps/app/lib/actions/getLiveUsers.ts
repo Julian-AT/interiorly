@@ -1,14 +1,14 @@
-"use server";
+'use server';
 
-import { RoomUser } from "@liveblocks/node";
-import { auth } from "@/auth";
-import { liveblocks } from "@/liveblocks.server.config";
-import { Document } from "@/types";
+import { currentUser } from '@interiorly/auth/server';
+import { liveblocks } from '@interiorly/collaboration/liveblocks.server.config';
+import type { Document } from '@interiorly/collaboration/types/document';
+import type { RoomUser } from '@liveblocks/node';
 
-type LiveUserList = { documentId: Document["id"]; users: RoomUser[] };
+type LiveUserList = { documentId: Document['id']; users: RoomUser[] };
 
 type Props = {
-  documentIds: Document["id"][];
+  documentIds: Document['id'][];
 };
 
 /**
@@ -26,31 +26,30 @@ export async function getLiveUsers({ documentIds }: Props) {
     promises.push(liveblocks.getActiveUsers(roomId));
   }
 
-  let session;
+  const user = await currentUser();
+
+  if (!user || user.banned) {
+    return {
+      error: {
+        code: 401,
+        message: 'Not signed in',
+        suggestion: 'Sign in to get a document',
+      },
+    };
+  }
+
   let currentActiveUsers = [];
   try {
     // Get session and rooms
-    const [sess, ...roomUsers] = await Promise.all([auth(), ...promises]);
-    session = sess;
+    const [, ...roomUsers] = await Promise.all([...promises]);
     currentActiveUsers = roomUsers;
   } catch (err) {
     console.error(err);
     return {
       error: {
         code: 500,
-        message: "Error fetching rooms",
-        suggestion: "Refresh the page and try again",
-      },
-    };
-  }
-
-  // Check user is logged in
-  if (!session) {
-    return {
-      error: {
-        code: 401,
-        message: "Not signed in",
-        suggestion: "Sign in to access active users",
+        message: 'Error fetching rooms',
+        suggestion: 'Refresh the page and try again',
       },
     };
   }
