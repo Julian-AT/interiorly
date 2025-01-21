@@ -5,16 +5,17 @@ import {
   getDraftsGroupName,
   userAllowedInRoom,
 } from '@/lib/utils';
-import { auth, currentUser } from '@interiorly/auth/server';
+import { auth } from '@interiorly/auth/server';
 import { liveblocks } from '@interiorly/collaboration/liveblocks.server.config';
 import type {
   Document,
+  DocumentGroup,
   DocumentType,
   DocumentUser,
-} from '@interiorly/collaboration/types/document';
-import type { RoomData } from '@liveblocks/node';
+} from '@interiorly/collaboration/types';
 
 export type GetDocumentsProps = {
+  groupIds?: DocumentGroup['id'][];
   userId?: DocumentUser['id'];
   documentType?: DocumentType;
   drafts?: boolean;
@@ -32,18 +33,31 @@ export type GetDocumentsResponse = {
  * Get a list of documents by groupId, userId, and metadata
  * Uses custom API endpoint
  *
+ * @param groupIds - The groups to filter for
  * @param userId - The user to filter for
  * @param documentType - The document type to filter for
  * @param drafts - Get only drafts
  * @param limit - The amount of documents to retrieve
  */
 export async function getDocuments({
+  groupIds = [],
   userId = undefined,
   documentType,
   drafts = false,
   limit = 20,
 }: GetDocumentsProps) {
-  // Build getRooms arguments
+  const user = await auth();
+
+  if (!user || !user.orgId || !user.userId) {
+    return {
+      error: {
+        code: 401,
+        message: 'Not signed in',
+        suggestion: 'Sign in to get documents',
+      },
+    };
+  }
+
   let query: string | undefined;
 
   if (documentType) {
@@ -58,42 +72,31 @@ export async function getDocuments({
   const draftGroupName = getDraftsGroupName(userId || '');
 
   if (drafts) {
+    // Drafts are stored as a group that uses the userId
     getRoomsOptions = {
       ...getRoomsOptions,
       groupIds: [draftGroupName],
     };
   } else {
+    // Not a draft, use other info
     getRoomsOptions = {
       ...getRoomsOptions,
+      groupIds: groupIds.filter((id) => id !== draftGroupName),
       userId: userId,
     };
   }
 
-  const user = await currentUser();
-  const { orgId } = await auth();
-
-  if (!user || !orgId) {
-    return {
-      error: {
-        code: 401,
-        message: 'Not signed in',
-        suggestion: 'Sign in to get a document',
-      },
-    };
+  if (getRoomsOptions.groupIds?.length === 0) {
+    getRoomsOptions.groupIds = [user.orgId];
   }
 
-  // only allow documents in the current organization
-  getRoomsOptions.groupIds = [orgId];
-
-  console.log(getRoomsOptions);
-
-  let getRoomsResponse: { data: RoomData[]; nextCursor: string | null };
+  // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
+  let getRoomsResponse;
   try {
     // Get session and rooms
     getRoomsResponse = await liveblocks.getRooms(getRoomsOptions);
   } catch (err) {
     console.log(err);
-
     return {
       error: {
         code: 500,
@@ -121,8 +124,8 @@ export async function getDocuments({
     if (
       userAllowedInRoom({
         accessAllowed: 'read',
-        userId: user.id,
-        groupIds: [],
+        userId: user.userId,
+        groupIds: [user.orgId],
         room,
       })
     ) {

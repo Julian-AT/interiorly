@@ -47,10 +47,10 @@ const SidebarDocumentButton = ({
             <div className="flex items-center gap-2">
               <CollapsibleTrigger asChild>
                 <IconWrapper className="group/trigger">
-                  <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-200 group-hover/trigger:opacity-0">
+                  <div className="absolute inset-0 flex items-center justify-center">
                     {icon}
                   </div>
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover/trigger:opacity-100">
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-0 group-hover/trigger:opacity-100">
                     <ArrowRight01Icon className="size-5 transition-transform duration-200 group-data-[state=open]/trigger:rotate-90" />
                   </div>
                 </IconWrapper>

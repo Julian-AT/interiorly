@@ -2,6 +2,7 @@
 import { AvatarStack } from '@/components/collaboration/avatar-stack';
 import { useOrganization } from '@interiorly/auth/client';
 import type { Document } from '@interiorly/collaboration/types';
+import { Badge } from '@interiorly/design-system/components/ui/badge';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,25 +13,20 @@ import {
 } from '@interiorly/design-system/components/ui/breadcrumb';
 import { Button } from '@interiorly/design-system/components/ui/button';
 import { useSidebar } from '@interiorly/design-system/components/ui/sidebar';
-import {
-  Comment01Icon,
-  HappyIcon,
-  LinerIcon,
-  Menu01Icon,
-  MoreHorizontalSquare01Icon,
-  SentIcon,
-  StarIcon,
-} from 'hugeicons-react';
-import type { ReactNode } from 'react';
+import { useSyncStatus } from '@liveblocks/react';
+import { HappyIcon, LinerIcon, Menu01Icon } from 'hugeicons-react';
+import { useState } from 'react';
+import { TextEditor } from '.';
 
 interface EditorLayoutProps {
   document: Document;
-  children: ReactNode;
 }
 
-const EditorLayout = ({ document, children }: EditorLayoutProps) => {
+const EditorLayout = ({ document }: EditorLayoutProps) => {
   const { setOpen, open } = useSidebar();
   const { organization } = useOrganization();
+  const [charsCount, setCharsCount] = useState<number>(0);
+  const syncStatus = useSyncStatus({ smooth: true });
 
   if (!organization) {
     return <div>No organization found. Please check your permissions.</div>;
@@ -42,7 +38,7 @@ const EditorLayout = ({ document, children }: EditorLayoutProps) => {
 
   return (
     <div className="flex min-h-screen w-full min-w-full flex-col">
-      <header className="relative z-50 flex h-10 items-center justify-between bg-background px-1 text-sm">
+      <header className="sticky top-0 z-50 flex h-10 items-center justify-between bg-background px-1 text-sm">
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
@@ -70,54 +66,41 @@ const EditorLayout = ({ document, children }: EditorLayoutProps) => {
           </Breadcrumb>
         </div>
         <div className="flex items-center gap-1 text-primary">
-          <span className="text-muted-foreground">Edited 2m ago</span>
-          <Button variant="ghost" className="gap-2 px-2" size="sm">
-            <SentIcon className="size-4" />
-            <span>Share</span>
-          </Button>
-          <Button variant="ghost" className="gap-2 px-2" size="sm">
-            <Comment01Icon className="size-4" />
-            <span>Comments</span>
-          </Button>
-          <Button
-            variant="ghost"
-            className="h-8 w-8 px-2"
-            size="icon"
-            aria-label="Star document"
-          >
-            <StarIcon className="size-5" />
-          </Button>
-          <Button
-            variant="ghost"
-            className="h-8 w-8 px-2"
-            size="icon"
-            aria-label="More options"
-          >
-            <MoreHorizontalSquare01Icon className="size-5" />
-          </Button>
+          <Badge variant="outline" className="bg-secondary text-xs">
+            {syncStatus === 'synchronizing' ? 'Unsaved' : 'Saved'}
+          </Badge>
+          <Badge variant="outline" className="bg-secondary text-xs">
+            {charsCount} Words
+          </Badge>
           <AvatarStack />
         </div>
       </header>
-      <div className="relative z-20 h-64 bg-secondary" />
-      <main className="relative z-30 mx-auto flex w-full max-w-3xl flex-1 flex-col overflow-hidden text-pretty bg-background px-8 py-16 shadow-sm">
-        {isIconDefault ? (
-          <div className="-top-8 absolute left-8 z-40 h-16 w-16 rounded-lg bg-muted shadow-md">
-            {document.icon}
+      <div className="relative z-10 h-64 bg-secondary" />
+      <main className="relative z-20 flex w-full flex-1 flex-col text-pretty bg-background shadow-sm">
+        <div className="relative mx-auto w-full max-w-4xl px-10 pt-16">
+          {isIconDefault ? (
+            <div className="-top-8 absolute left-9 z-30 h-16 w-16 rounded-lg bg-muted shadow-md">
+              {document.icon}
+            </div>
+          ) : (
+            <Button
+              variant="ghost"
+              className="absolute top-4 left-7 flex h-7 items-center justify-center gap-1.5 rounded-lg px-1.5"
+              size="sm"
+            >
+              <HappyIcon className="size-4 text-muted-foreground" />
+              <span className="text-muted-foreground">Add Icon</span>
+            </Button>
+          )}
+          <div className="flex items-center space-x-4">
+            <h1 className="font-bold text-4xl tracking-tight">
+              {document.name}
+            </h1>
           </div>
-        ) : (
-          <Button
-            variant="ghost"
-            className="absolute top-4 left-7 flex h-7 items-center justify-center gap-1.5 rounded-lg px-1.5"
-            size="sm"
-          >
-            <HappyIcon className="size-4 text-muted-foreground" />
-            <span className="text-muted-foreground">Add Icon</span>
-          </Button>
-        )}
-        <div className="flex items-center space-x-4">
-          <h1 className="font-bold text-4xl tracking-tight">{document.name}</h1>
         </div>
-        <div className="mt-4">{children}</div>
+        <div className="mx-auto mt-4 w-full max-w-4xl">
+          <TextEditor setCharsCount={setCharsCount} />
+        </div>
       </main>
     </div>
   );

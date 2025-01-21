@@ -12,10 +12,11 @@ import {
   SidebarMenuItem,
 } from '@interiorly/design-system/components/ui/sidebar';
 import { Skeleton } from '@interiorly/design-system/components/ui/skeleton';
+import DocumentListSkeleton from './document-list-skeleton';
 
 export const GlobalSidebarSkeleton = () => {
   return (
-    <Sidebar>
+    <Sidebar className="bg-red-500">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
@@ -40,10 +41,7 @@ export const GlobalSidebarSkeleton = () => {
             <Skeleton className="h-4 w-1/3" />
           </SidebarGroupLabel>
           <SidebarMenu className="relative flex flex-col gap-2 overflow-x-hidden">
-            <div className="absolute z-10 h-full w-full bg-gradient-to-t from-secondary to-transparent" />
-            {Array.from({ length: 8 }).map((_, index) => (
-              <Skeleton key={index} className="h-7 w-full" />
-            ))}
+            <DocumentListSkeleton />
           </SidebarMenu>
         </SidebarGroup>
         <SidebarGroup className="mt-auto">

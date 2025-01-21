@@ -1,9 +1,7 @@
 'use client';
-import { GlobalSidebarSkeleton } from '@/components/skeletons/sidebar-skeleton';
 import { UserProfilePopover } from '@/components/user/user-profile-popover';
-import { createDocument, getDocuments } from '@/lib/actions';
+import {} from '@/lib/actions';
 import { WORKSPACE_NAV } from '@/lib/constants/navigation';
-import { useDocumentsFunctionSWR } from '@/lib/hooks';
 import { useOrganization, useUser } from '@interiorly/auth/client';
 import { Button } from '@interiorly/design-system/components/ui/button';
 import { Separator } from '@interiorly/design-system/components/ui/separator';
@@ -15,7 +13,6 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
-  SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -25,96 +22,29 @@ import { cn } from '@interiorly/design-system/lib/utils';
 import {
   Add01Icon,
   Delete02Icon,
-  File02Icon,
   HelpCircleIcon,
   PencilEdit02Icon,
   SearchList01Icon,
   UserAdd01Icon,
 } from 'hugeicons-react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { type ReactNode, useCallback, useEffect, useMemo } from 'react';
+import { usePathname } from 'next/navigation';
+import { useMemo } from 'react';
 import CreateDocumentDialog from '../dashboard/create-document-dialog';
 import HelpPopover from '../dashboard/help-popover';
 import { QuickSearch } from '../dashboard/quick-search-dialog';
 import OrganizationInviteMembersDialog from '../organization/organization-invite-members-dialog';
 import { OrganizationPopover } from '../organization/organization-popover';
 import EditorLayoutSkeleton from '../skeletons/editor-layout-skeleton';
-import SidebarDocumentButton from './sidebar-document-button';
+import { GlobalSidebarSkeleton } from '../skeletons/sidebar-skeleton';
+import KbdShortcutHandler from './kbd-shortcut-handler';
+import SidebarDocuments from './sidebar-documents';
 
-type GlobalSidebarProperties = {
-  readonly children: ReactNode;
-};
-
-export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
+export const GlobalSidebar = () => {
   const pathname = usePathname();
-  const router = useRouter();
   const { organization } = useOrganization();
   const { user } = useUser();
-  const { data, error, isLoading } = useDocumentsFunctionSWR(
-    [
-      getDocuments,
-      {
-        userId: user?.id,
-      },
-    ],
-    {
-      refreshInterval: 10000,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      revalidateOnMount: true,
-    }
-  );
 
-  // Memoize keyboard shortcut handler
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (!e.metaKey && !e.ctrlKey) return;
-
-      const item = WORKSPACE_NAV.find(
-        (item) =>
-          item.command && e.key === item.command.split('+')[1].toLowerCase()
-      );
-
-      if (item) {
-        e.preventDefault();
-        router.push(item.url);
-      }
-    },
-    [router]
-  );
-
-  // Handle keyboard shortcuts
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [handleKeyDown]);
-
-  // Handle document creation
-  const handleCreateDocument = useCallback(async () => {
-    if (!user?.id || !organization?.id) return;
-
-    try {
-      const response = await createDocument(
-        {
-          name: 'Untitled Document',
-          userId: user.id,
-          type: 'text',
-          groupIds: [organization.id],
-          userAccesses: [user.id],
-        },
-        true
-      );
-
-      if (response?.data?.id) {
-        router.push(`/text/${response.data.id}`);
-      }
-    } catch (error) {
-      console.error('Failed to create document:', error);
-    }
-  }, [user?.id, router, organization?.id]);
-
-  // Memoize workspace navigation items
   const workspaceNavItems = useMemo(
     () =>
       WORKSPACE_NAV.map((item) => (
@@ -151,26 +81,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
     [pathname]
   );
 
-  // Memoize document list
-  const documentList = useMemo(
-    () =>
-      data?.documents.map((document) => (
-        <SidebarDocumentButton
-          key={document.id}
-          name={document.name}
-          url={`/${document.type}/${document.id}`}
-          icon={<File02Icon className="size-5" />}
-          className={
-            pathname === `/${document.type}/${document.id}`
-              ? 'bg-muted'
-              : undefined
-          }
-        />
-      )),
-    [data?.documents, pathname]
-  );
-
-  if (isLoading || !user || !organization || !data || error) {
+  if (!user || !organization) {
     return (
       <div className="relative flex min-h-screen w-full min-w-full">
         <GlobalSidebarSkeleton />
@@ -181,6 +92,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
 
   return (
     <>
+      <KbdShortcutHandler />
       <Sidebar>
         <SidebarRail />
         <SidebarHeader>
@@ -218,16 +130,21 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
           <SidebarGroup className="group group-data-[collapsible=icon]:hidden">
             <SidebarGroupLabel className="group/documents justify-between">
               Documents
-              <Button
+              {/* <Button
                 variant="ghost"
                 size="icon"
                 className="h-4 w-4 hover:bg-muted"
                 onClick={handleCreateDocument}
               >
                 <Add01Icon className="size-4" />
-              </Button>
+              </Button> */}
             </SidebarGroupLabel>
-            <SidebarMenu>{documentList}</SidebarMenu>
+            <SidebarMenu>
+              <SidebarDocuments
+                userId={user?.id || ''}
+                organizationId={organization?.id || ''}
+              />
+            </SidebarMenu>
           </SidebarGroup>
           <SidebarGroup className="mt-auto">
             <SidebarGroupContent>
@@ -308,7 +225,6 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
           </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
-      <SidebarInset>{children}</SidebarInset>
     </>
   );
 };

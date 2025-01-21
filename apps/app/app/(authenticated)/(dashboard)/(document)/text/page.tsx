@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation';
 
-const DocumentRedirectPage = () => {
-  return redirect('/');
+const DocumentRedirectPage = async () => {
+  await redirect('/');
+  return null;
 };
 
 export default DocumentRedirectPage;

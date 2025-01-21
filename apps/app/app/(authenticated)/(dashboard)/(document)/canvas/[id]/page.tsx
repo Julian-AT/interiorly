@@ -1,4 +1,4 @@
-import EditorLayout from '@/components/dashboard/editor/editor-layout';
+import { Canvas } from '@/components/dashboard/canvas';
 import { DocumentProviders } from '@/components/provider/documents-provider';
 import { getDocument } from '@/lib/actions';
 import { notFound } from 'next/navigation';
@@ -21,19 +21,19 @@ export async function generateMetadata({ params }: DocumentPageProps) {
   }
 
   return {
-    title: `${
-      document.data.name
-        ? `${
-            // biome-ignore lint/performance/useTopLevelRegex: <explanation>
-            document.data.icon?.match(/^\p{Emoji}$/u) ? document.data.icon : ''
-          } ${document.data.name}`
-        : 'Document'
-    } - Interiorly`,
+    title: document.data.name
+      ? `${
+          // biome-ignore lint/performance/useTopLevelRegex: <explanation>
+          document.data.icon?.match(/^\p{Emoji}$/u) ? document.data.icon : ''
+        } ${document.data.name}`
+      : 'Document',
   };
 }
 
-const DocumentPage = async ({ params }: DocumentPageProps) => {
+const CanvasDocumentPage = async ({ params }: DocumentPageProps) => {
   const { id } = await params;
+
+  console.log(id);
 
   const { data = null, error = null } = await getDocument({
     documentId: id,
@@ -45,9 +45,11 @@ const DocumentPage = async ({ params }: DocumentPageProps) => {
 
   return (
     <DocumentProviders roomId={id} initialDocument={data}>
-      <EditorLayout document={data} />
+      <div className="flex h-screen w-full flex-col items-center justify-center">
+        <Canvas />
+      </div>
     </DocumentProviders>
   );
 };
 
-export default DocumentPage;
+export default CanvasDocumentPage;

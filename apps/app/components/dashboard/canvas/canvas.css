@@ -1,0 +1,17 @@
+.tl-theme__light {
+  --color-background: hsl(var(--background));
+  --color-panel: hsl(var(--muted));
+}
+
+.tl-theme__dark {
+  --color-background: hsl(var(--background));
+  --color-text-0: hsl(var(--primary));
+  --color-panel: hsl(var(--secondary));
+  --color-low: hsl(var(--secondary));
+  --color-divider: hsl(var(--muted));
+  --color-panel-contrast: hsl(var(--border));
+  --color-panel-overlay: hsl(var(--secondary));
+  --color-selected: hsl(var(--muted));
+  --color-selected-contrast: hsl(var(--primary));
+  --color-text-1: hsl(var(--muted-foreground));
+}
