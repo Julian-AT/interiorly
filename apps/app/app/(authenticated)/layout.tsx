@@ -3,6 +3,7 @@ import { auth, currentUser } from '@interiorly/auth/server';
 import { secure } from '@interiorly/security';
 import { redirect } from 'next/navigation';
 import type React from 'react';
+import { OrganizationSelector } from '../../components/organization/organization-selector';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -18,10 +19,6 @@ const AppLayout = async ({ children }: AppLayoutProps) => {
 
   if (!user || user.banned) {
     redirectToSignIn();
-  }
-
-  if (!orgId) {
-    redirect('/onboarding');
   }
 
   return children;

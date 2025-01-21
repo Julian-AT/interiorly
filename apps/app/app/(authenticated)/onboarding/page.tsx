@@ -1,6 +1,7 @@
 'use client';
 
-import { useOrganization, useOrganizationList } from '@interiorly/auth/client';
+import { OrganizationSelector } from '@/components/organization/organization-selector';
+import { CreateOrganization, useOrganization, useOrganizationList } from '@interiorly/auth/client';
 import { Loading03Icon } from 'hugeicons-react';
 import { redirect } from 'next/navigation';
 
@@ -14,34 +15,42 @@ const OnboardingPage = () => {
     userMemberships: true,
   });
 
-  if (!isLoadedOrg || !isLoadedOrgList) {
-    return (
-      <div className="flex h-screen items-center justify-center gap-4">
-        <Loading03Icon className="animate-spin" />
-        <span className="text-muted-foreground">Getting things ready...</span>
-      </div>
-    );
-  }
+  return <div className='min-h-screen min-w-screen flex items-center justify-center'>
+    <CreateOrganization hideSlug />
+  </div>
 
-  if (organization) {
-    return redirect('/');
-  }
+  // if (!isLoadedOrg || !isLoadedOrgList) {
+  //   return (
+  //     <div className="flex h-screen items-center justify-center gap-4">
+  //       <Loading03Icon className="animate-spin" />
+  //       <span className="text-muted-foreground">Getting things ready...</span>
+  //     </div>
+  //   );
+  // }
 
-  if (setActive && userMemberships.count > 0) {
-    const newOrg = userMemberships.data[0].organization;
-    setActive({ organization: newOrg.id });
-    return redirect('/');
-  }
+  // if (!organization) {
+  //   return <OrganizationSelector />
+  // }
 
-  return (
-    <div className="flex h-screen flex-col items-center justify-center gap-4">
-      <h1 className="font-bold text-2xl">Welcome to Interiorly</h1>
-      <p className="text-muted-foreground">
-        You currently have {userMemberships.count} organization
-        {userMemberships.count === 1 ? '' : 's'}
-      </p>
-    </div>
-  );
+  // if (organization) {
+  //   return redirect('/');
+  // }
+
+  // if (setActive && userMemberships.count > 0) {
+  //   const newOrg = userMemberships.data[0].organization;
+  //   setActive({ organization: newOrg.id });
+  //   return redirect('/');
+  // }
+
+  // return (
+  //   <div className="flex h-screen flex-col items-center justify-center gap-4">
+  //     <h1 className="font-bold text-2xl">Welcome to Interiorly</h1>
+  //     <p className="text-muted-foreground">
+  //       You currently have {userMemberships.count} organization
+  //       {userMemberships.count === 1 ? '' : 's'}
+  //     </p>
+  //   </div>
+  // );
 };
 
 export default OnboardingPage;
