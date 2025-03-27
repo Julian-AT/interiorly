@@ -11,6 +11,8 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
+    "@clerk/elements": "^0.23.1",
+    "@clerk/nextjs": "^6.9.6",
     "@hookform/resolvers": "^3.9.1",
     "@interiorly/analytics": "workspace:*",
     "@interiorly/auth": "workspace:*",

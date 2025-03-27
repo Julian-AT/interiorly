@@ -1,7 +1,4 @@
-import { env } from '@/env';
-import { ModeToggle } from '@interiorly/design-system/components/mode-toggle';
-import { CommandIcon } from 'hugeicons-react';
-import Link from 'next/link';
+import Image from 'next/image';
 import type { ReactNode } from 'react';
 
 type AuthLayoutProps = {
@@ -9,27 +6,26 @@ type AuthLayoutProps = {
 };
 
 const AuthLayout = ({ children }: AuthLayoutProps) => (
-  <div className="container relative grid h-dvh flex-col items-center justify-center lg:max-w-none lg:px-0">
-      <div className="mx-auto flex w-full max-w-[400px] flex-col justify-center space-y-6">
-        {children}
-        <p className="px-8 text-center text-muted-foreground text-sm">
-          By clicking continue, you agree to our{' '}
-          <Link
-            href={new URL('/legal/terms', env.NEXT_PUBLIC_WEB_URL).toString()}
-            className="underline underline-offset-4 hover:text-primary"
-          >
-            Terms of Service
-          </Link>{' '}
-          and{' '}
-          <Link
-            href={new URL('/legal/privacy', env.NEXT_PUBLIC_WEB_URL).toString()}
-            className="underline underline-offset-4 hover:text-primary"
-          >
-            Privacy Policy
-          </Link>
-          .
+  <div className="grid min-h-screen min-w-screen lg:grid-cols-2">
+    <div className="relative hidden flex-col items-center justify-center gap-4 lg:flex">
+      <Image
+        src="/assets/background.webp"
+        alt="background"
+        width={1024}
+        height={1024}
+        className="absolute inset-0 h-full w-full object-cover antialiased"
+      />
+      <div className="absolute inset-0" />
+      <div className="absolute z-10 flex flex-col items-center justify-center p-6 text-center text-white">
+        <h1 className="my-2 pt-2 text-5xl tracking-tight">
+          Everything you need, <br /> to make anything you want.
+        </h1>
+        <p className="font-light text-lg">
+          Transform your space with professional interior design
         </p>
       </div>
+    </div>
+    {children}
   </div>
 );
 

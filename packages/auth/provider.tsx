@@ -15,7 +15,6 @@ export const AuthProvider = (
   const baseTheme = isDark ? dark : undefined;
   const variables: Theme['variables'] = {
     // Core
-    colorBackground: '#1F1F1F',
     fontFamily: tailwind.theme.fontFamily.sans.join(', '),
     fontFamilyButtons: tailwind.theme.fontFamily.sans.join(', '),
     fontSize: tailwind.theme.fontSize.sm[0],
