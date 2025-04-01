@@ -31,7 +31,7 @@
     "@sentry/nextjs": "^8.47.0",
     "@t3-oss/env-nextjs": "^0.11.1",
     "@tiptap/extension-highlight": "^2.11.0",
-    "@tiptap/extension-image": "^2.11.0",
+    "@tiptap/extension-image": "^2.11.7",
     "@tiptap/extension-link": "^2.11.0",
     "@tiptap/extension-placeholder": "^2.11.0",
     "@tiptap/extension-task-list": "^2.11.0",
