@@ -1,4 +1,4 @@
-import '@interiorly/design-system/styles/globals.css';
+import './globals.css';
 import { DesignSystemProvider } from '@interiorly/design-system';
 import { Toaster } from '@interiorly/design-system/components/ui/toaster';
 import { fonts } from '@interiorly/design-system/lib/fonts';

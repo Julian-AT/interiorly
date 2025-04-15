@@ -1,8 +1,5 @@
 {
-  "extends": [
-    "@interiorly/typescript-config/nextjs.json",
-    "@interiorly/cms/typescript-config.json"
-  ],
+  "extends": ["@interiorly/typescript-config/nextjs.json"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

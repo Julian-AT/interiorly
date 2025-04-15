@@ -1,11 +1,10 @@
 import typography from '@tailwindcss/typography';
-import type { Config } from 'tailwindcss';
 import animate from 'tailwindcss-animate';
 import defaultTheme from 'tailwindcss/defaultTheme';
 import typographyConfig from './typography.config';
 
-export const config: Config = {
-  darkMode: ['class'],
+export const config = {
+  darkMode: 'class',
   content: [
     './node_modules/@interiorly/design-system/components/**/*.{ts,tsx}',
     './node_modules/@interiorly/design-system/lib/**/*.{ts,tsx}',
@@ -29,6 +28,7 @@ export const config: Config = {
         input: 'hsl(var(--input) / <alpha-value>)',
         ring: 'hsl(var(--ring) / <alpha-value>)',
         background: 'hsl(var(--background) / <alpha-value>)',
+        'background-subtle': 'hsl(var(--background-subtle) / <alpha-value>)',
         foreground: 'hsl(var(--foreground) / <alpha-value>)',
         primary: {
           DEFAULT: 'hsl(var(--primary) / <alpha-value>)',

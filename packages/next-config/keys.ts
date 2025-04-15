@@ -1,9 +1,9 @@
-import { vercel } from '@t3-oss/env-core/presets';
-import { createEnv } from '@t3-oss/env-nextjs';
-import { z } from 'zod';
+export const keys = async () => {
+  const { vercel } = await import('@t3-oss/env-core/presets-zod');
+  const { createEnv } = await import('@t3-oss/env-nextjs');
+  const { z } = await import('zod');
 
-export const keys = () =>
-  createEnv({
+  return createEnv({
     extends: [vercel()],
     server: {
       ANALYZE: z.string().optional(),
@@ -26,3 +26,4 @@ export const keys = () =>
       NEXT_PUBLIC_DOCS_URL: process.env.NEXT_PUBLIC_DOCS_URL,
     },
   });
+};

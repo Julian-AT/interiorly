@@ -1,0 +1,927 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-subtle: var(--background-subtle);
+  --color-background-muted: var(--background-muted);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  --animate-orbit: orbit calc(var(--duration) * 1s) linear infinite;
+  --animate-slide-down: slide-down 300ms cubic-bezier(0.87, 0, 0.13, 1);
+  --animate-slide-up: slide-up 300ms cubic-bezier(0.87, 0, 0.13, 1);
+  --scaleIn: scaleIn 200ms ease;
+  --scaleOut: scaleOut 200ms ease;
+  --fadeIn: fadeIn 200ms ease;
+  --fadeOut: fadeOut 200ms ease;
+  --enterFromLeft: enterFromLeft 250ms ease;
+  --enterFromRight: enterFromRight 250ms ease;
+  --exitToLeft: exitToLeft 250ms ease;
+  --exitToRight: exitToRight 250ms ease;
+  --animate-elliptical-orbit: elliptical-orbit 20s linear infinite;
+
+  @keyframes orbit {
+    0% {
+      transform: rotate(calc(var(--angle) * 1deg))
+        translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg));
+    }
+    100% {
+      transform: rotate(calc(var(--angle) * 1deg + 360deg))
+        translateY(calc(var(--radius) * 1px))
+        rotate(calc((var(--angle) * -1deg) - 360deg));
+    }
+  }
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes slide-down {
+    from {
+      height: 0px;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes slide-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0px;
+    }
+  }
+
+  /* Add this to your globals.css */
+  @keyframes enterFromRight {
+    from {
+      opacity: 0;
+      transform: translateX(200px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes enterFromLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-200px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes exitToRight {
+    from {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateX(200px);
+    }
+  }
+
+  @keyframes exitToLeft {
+    from {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateX(-200px);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: rotateX(-30deg) scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: rotateX(0deg) scale(1);
+    }
+  }
+
+  @keyframes scaleOut {
+    from {
+      opacity: 1;
+      transform: rotateX(0deg) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: rotateX(-10deg) scale(0.95);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes elliptical-orbit {
+    from {
+      transform: rotate(var(--angle, 0) deg)
+        translate(var(--h-radius, 160px), 0)
+        rotate(calc(var(--angle, 0) deg * -1));
+    }
+    to {
+      transform: rotate(calc(var(--angle, 0) deg + 360deg))
+        translate(var(--h-radius, 160px), 0)
+        rotate(calc((var(--angle, 0) deg + 360deg) * -1));
+    }
+  }
+}
+
+:root {
+  --background: 0 0% 100%;
+  --muted: 0 0% 98%;
+  --background-subtle: 0 0% 100%;
+  --foreground: 240 10% 15%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --primary: 240 5.9% 10%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: ;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --warning: 35, 100%, 52%;
+  --warning-foreground: 0 0% 9%;
+  --ring: 240 5% 64.9%;
+  --radius: 0.5rem;
+  --alpha: 0 0% 0%;
+  --chart-1: 12 76% 61%;
+  --chart-2: 173 58% 39%;
+  --chart-3: 197 37% 24%;
+  --chart-4: 43 74% 66%;
+  --chart-5: 27 87% 67%;
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 240 5.3% 26.1%;
+  --sidebar-primary: 240 5.9% 10%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 240 4.8% 95.9%;
+  --sidebar-accent-foreground: 240 5.9% 10%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 240 5% 64.9%;
+  --quaint-background-subtle: 240, 3%, 8%, 0.5;
+  --quaint-foreground-subtle: 46 79% 87%;
+}
+
+.dark {
+  --background: oklch(0.17 0.0021 286.18);
+  --muted: oklch(0.15 0 0);
+  --background-subtle: oklch(0.19 0.0024 286.17);
+  --foreground: oklch(0.98 0 0);
+  --muted-foreground: oklch(0.71 0.0129 286.07);
+  --card: oklch(0.14 0.0044 285.82);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: oklch(0.14 0.0044 285.82);
+  --popover-foreground: oklch(0.98 0 0);
+  --border: oklch(0.27 0.0055 286.03);
+  --input: oklch(0.27 0.0055 286.03);
+  --primary: oklch(0.98 0 0);
+  --primary-foreground: 240 5.9% 10%;
+  --secondary: oklch(0.27 0.0055 286.03);
+  --secondary-foreground: oklch(0.98 0 0);
+  --accent: oklch(0.27 0.0055 286.03);
+  --accent-foreground: oklch(0.98 0 0);
+  --destructive: oklch(0.4 0.1331 25.72);
+  --destructive-foreground: oklch(0.97 0.0127 17.38);
+  --warning: oklch(0.77 0.1727 64.16);
+  --warning-foreground: oklch(0.2 0 0);
+  --ring: oklch(0.27 0.0055 286.03);
+  --chart-1: 220 70% 50%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
+  --sidebar-background: oklch(0.21 0.0059 285.88);
+  --sidebar-foreground: oklch(0.97 0.0013 286.38);
+  --sidebar-primary: oklch(0.49 0.217 264.39);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.27 0.0055 286.03);
+  --sidebar-accent-foreground: oklch(0.97 0.0013 286.38);
+  --sidebar-border: oklch(0.27 0.0055 286.03);
+  --sidebar-ring: oklch(0.87 0.0055 286.29);
+  --quaint-background-subtle: oklch(1 0 0 / 60%);
+  --quaint-foreground-subtle: oklch(0.94 0.0539 93.09);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+.ProseMirror .is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: hsl(var(--muted-foreground));
+  pointer-events: none;
+  height: 0;
+}
+.ProseMirror .is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: hsl(var(--muted-foreground));
+  pointer-events: none;
+  height: 0;
+}
+
+/* Custom image styles */
+
+.ProseMirror img {
+  transition: filter 0.1s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    filter: brightness(90%);
+  }
+
+  &.ProseMirror-selectednode {
+    outline: 3px solid #5abbf7;
+    filter: brightness(90%);
+  }
+}
+
+.img-placeholder {
+  position: relative;
+
+  &:before {
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 3px solid var(--novel-stone-200);
+    border-top-color: var(--novel-stone-800);
+    animation: spinning 0.6s linear infinite;
+  }
+}
+
+@keyframes spinning {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Custom TODO list checkboxes – shoutout to this awesome tutorial: https://moderncss.dev/pure-css-custom-checkbox-style/ */
+
+ul[data-type="taskList"] li > label {
+  margin-right: 0.2rem;
+  user-select: none;
+}
+
+@media screen and (max-width: 768px) {
+  ul[data-type="taskList"] li > label {
+    margin-right: 0.5rem;
+  }
+}
+
+ul[data-type="taskList"] li > label input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: hsl(var(--background));
+  margin: 0;
+  cursor: pointer;
+  width: 1.2em;
+  height: 1.2em;
+  position: relative;
+  top: 5px;
+  border: 2px solid hsl(var(--border));
+  margin-right: 0.3rem;
+  display: grid;
+  place-content: center;
+
+  &:hover {
+    background-color: hsl(var(--accent));
+  }
+
+  &:active {
+    background-color: hsl(var(--accent));
+  }
+
+  &::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em;
+    transform-origin: center;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  }
+
+  &:checked::before {
+    transform: scale(1);
+  }
+}
+
+ul[data-type="taskList"] li[data-checked="true"] > div > p {
+  color: var(--muted-foreground);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+/* Overwrite tippy-box original max-width */
+
+.tippy-box {
+  max-width: 400px !important;
+}
+
+.ProseMirror:not(.dragging) .ProseMirror-selectednode {
+  outline: none !important;
+  background-color: var(--novel-highlight-blue);
+  transition: background-color 0.2s;
+  box-shadow: none;
+}
+
+.drag-handle {
+  position: fixed;
+  opacity: 1;
+  transition: opacity ease-in 0.2s;
+  border-radius: 0.25rem;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' style='fill: rgba(0, 0, 0, 0.5)'%3E%3Cpath d='M3,2 C2.44771525,2 2,1.55228475 2,1 C2,0.44771525 2.44771525,0 3,0 C3.55228475,0 4,0.44771525 4,1 C4,1.55228475 3.55228475,2 3,2 Z M3,6 C2.44771525,6 2,5.55228475 2,5 C2,4.44771525 2.44771525,4 3,4 C3.55228475,4 4,4.44771525 4,5 C4,5.55228475 3.55228475,6 3,6 Z M3,10 C2.44771525,10 2,9.55228475 2,9 C2,8.44771525 2.44771525,8 3,8 C3.55228475,8 4,8.44771525 4,9 C4,9.55228475 3.55228475,10 3,10 Z M7,2 C6.44771525,2 6,1.55228475 6,1 C6,0.44771525 6.44771525,0 7,0 C7.55228475,0 8,0.44771525 8,1 C8,1.55228475 7.55228475,2 7,2 Z M7,6 C6.44771525,6 6,5.55228475 6,5 C6,4.44771525 6.44771525,4 7,4 C7.55228475,4 8,4.44771525 8,5 C8,5.55228475 7.55228475,6 7,6 Z M7,10 C6.44771525,10 6,9.55228475 6,9 C6,8.44771525 6.44771525,8 7,8 C7.55228475,8 8,8.44771525 8,9 C8,9.55228475 7.55228475,10 7,10 Z'%3E%3C/path%3E%3C/svg%3E");
+  background-size: calc(0.5em + 0.375rem) calc(0.5em + 0.375rem);
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 1.2rem;
+  height: 1.5rem;
+  z-index: 50;
+  cursor: grab;
+
+  /* biome-ignore lint/nursery/noDescendingSpecificity: <explanation> */
+  &:hover {
+    background-color: var(--novel-stone-100);
+    transition: background-color 0.2s;
+  }
+
+  /* biome-ignore lint/nursery/noDescendingSpecificity: <explanation> */
+  &:active {
+    background-color: var(--novel-stone-200);
+    transition: background-color 0.2s;
+    cursor: grabbing;
+  }
+
+  &.hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 600px) {
+    display: none;
+    pointer-events: none;
+  }
+}
+
+.dark .drag-handle {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' style='fill: rgba(255, 255, 255, 0.5)'%3E%3Cpath d='M3,2 C2.44771525,2 2,1.55228475 2,1 C2,0.44771525 2.44771525,0 3,0 C3.55228475,0 4,0.44771525 4,1 C4,1.55228475 3.55228475,2 3,2 Z M3,6 C2.44771525,6 2,5.55228475 2,5 C2,4.44771525 2.44771525,4 3,4 C3.55228475,4 4,4.44771525 4,5 C4,5.55228475 3.55228475,6 3,6 Z M3,10 C2.44771525,10 2,9.55228475 2,9 C2,8.44771525 2.44771525,8 3,8 C3.55228475,8 4,8.44771525 4,9 C4,9.55228475 3.55228475,10 3,10 Z M7,2 C6.44771525,2 6,1.55228475 6,1 C6,0.44771525 6.44771525,0 7,0 C7.55228475,0 8,0.44771525 8,1 C8,1.55228475 7.55228475,2 7,2 Z M7,6 C6.44771525,6 6,5.55228475 6,5 C6,4.44771525 6.44771525,4 7,4 C7.55228475,4 8,4.44771525 8,5 C8,5.55228475 7.55228475,6 7,6 Z M7,10 C6.44771525,10 6,9.55228475 6,9 C6,8.44771525 6.44771525,8 7,8 C7.55228475,8 8,8.44771525 8,9 C8,9.55228475 7.55228475,10 7,10 Z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+/* === NOVEL ================== */
+
+.ProseMirror {
+  @apply p-12 px-8 sm:px-12;
+}
+
+.ProseMirror .is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: hsl(var(--muted-foreground));
+  pointer-events: none;
+  height: 0;
+}
+.ProseMirror .is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: hsl(var(--muted-foreground));
+  pointer-events: none;
+  height: 0;
+}
+
+/* Custom image styles */
+
+.ProseMirror img {
+  transition: filter 0.1s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    filter: brightness(90%);
+  }
+
+  &.ProseMirror-selectednode {
+    outline: 3px solid #5abbf7;
+    filter: brightness(90%);
+  }
+}
+
+.img-placeholder {
+  position: relative;
+
+  &:before {
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 3px solid var(--novel-stone-200);
+    border-top-color: var(--novel-stone-800);
+    animation: spinning 0.6s linear infinite;
+  }
+}
+
+@keyframes spinning {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Custom TODO list checkboxes – shoutout to this awesome tutorial: https://moderncss.dev/pure-css-custom-checkbox-style/ */
+
+ul[data-type="taskList"] li > label {
+  margin-right: 0.2rem;
+  user-select: none;
+}
+
+@media screen and (max-width: 768px) {
+  ul[data-type="taskList"] li > label {
+    margin-right: 0.5rem;
+  }
+}
+
+ul[data-type="taskList"] li > label input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: hsl(var(--background));
+  margin: 0;
+  cursor: pointer;
+  width: 1.2em;
+  height: 1.2em;
+  position: relative;
+  top: 5px;
+  border: 2px solid hsl(var(--border));
+  margin-right: 0.3rem;
+  display: grid;
+  place-content: center;
+
+  &:hover {
+    background-color: hsl(var(--accent));
+  }
+
+  &:active {
+    background-color: hsl(var(--accent));
+  }
+
+  &::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em;
+    transform-origin: center;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  }
+
+  &:checked::before {
+    transform: scale(1);
+  }
+}
+
+ul[data-type="taskList"] li[data-checked="true"] > div > p {
+  color: var(--muted-foreground);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+/* Overwrite tippy-box original max-width */
+
+.tippy-box {
+  max-width: 400px !important;
+}
+
+.ProseMirror:not(.dragging) .ProseMirror-selectednode {
+  outline: none !important;
+  background-color: var(--novel-highlight-blue);
+  transition: background-color 0.2s;
+  box-shadow: none;
+}
+
+.drag-handle {
+  position: fixed;
+  opacity: 1;
+  transition: opacity ease-in 0.2s;
+  border-radius: 0.25rem;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' style='fill: rgba(0, 0, 0, 0.5)'%3E%3Cpath d='M3,2 C2.44771525,2 2,1.55228475 2,1 C2,0.44771525 2.44771525,0 3,0 C3.55228475,0 4,0.44771525 4,1 C4,1.55228475 3.55228475,2 3,2 Z M3,6 C2.44771525,6 2,5.55228475 2,5 C2,4.44771525 2.44771525,4 3,4 C3.55228475,4 4,4.44771525 4,5 C4,5.55228475 3.55228475,6 3,6 Z M3,10 C2.44771525,10 2,9.55228475 2,9 C2,8.44771525 2.44771525,8 3,8 C3.55228475,8 4,8.44771525 4,9 C4,9.55228475 3.55228475,10 3,10 Z M7,2 C6.44771525,2 6,1.55228475 6,1 C6,0.44771525 6.44771525,0 7,0 C7.55228475,0 8,0.44771525 8,1 C8,1.55228475 7.55228475,2 7,2 Z M7,6 C6.44771525,6 6,5.55228475 6,5 C6,4.44771525 6.44771525,4 7,4 C7.55228475,4 8,4.44771525 8,5 C8,5.55228475 7.55228475,6 7,6 Z M7,10 C6.44771525,10 6,9.55228475 6,9 C6,8.44771525 6.44771525,8 7,8 C7.55228475,8 8,8.44771525 8,9 C8,9.55228475 7.55228475,10 7,10 Z'%3E%3C/path%3E%3C/svg%3E");
+  background-size: calc(0.5em + 0.375rem) calc(0.5em + 0.375rem);
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 1.2rem;
+  height: 1.5rem;
+  z-index: 50;
+  cursor: grab;
+
+  /* biome-ignore lint/nursery/noDescendingSpecificity: <explanation> */
+  &:hover {
+    background-color: var(--novel-stone-100);
+    transition: background-color 0.2s;
+  }
+
+  /* biome-ignore lint/nursery/noDescendingSpecificity: <explanation> */
+  &:active {
+    background-color: var(--novel-stone-200);
+    transition: background-color 0.2s;
+    cursor: grabbing;
+  }
+
+  &.hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 600px) {
+    display: none;
+    pointer-events: none;
+  }
+}
+
+.dark .drag-handle {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' style='fill: rgba(255, 255, 255, 0.5)'%3E%3Cpath d='M3,2 C2.44771525,2 2,1.55228475 2,1 C2,0.44771525 2.44771525,0 3,0 C3.55228475,0 4,0.44771525 4,1 C4,1.55228475 3.55228475,2 3,2 Z M3,6 C2.44771525,6 2,5.55228475 2,5 C2,4.44771525 2.44771525,4 3,4 C3.55228475,4 4,4.44771525 4,5 C4,5.55228475 3.55228475,6 3,6 Z M3,10 C2.44771525,10 2,9.55228475 2,9 C2,8.44771525 2.44771525,8 3,8 C3.55228475,8 4,8.44771525 4,9 C4,9.55228475 3.55228475,10 3,10 Z M7,2 C6.44771525,2 6,1.55228475 6,1 C6,0.44771525 6.44771525,0 7,0 C7.55228475,0 8,0.44771525 8,1 C8,1.55228475 7.55228475,2 7,2 Z M7,6 C6.44771525,6 6,5.55228475 6,5 C6,4.44771525 6.44771525,4 7,4 C7.55228475,4 8,4.44771525 8,5 C8,5.55228475 7.55228475,6 7,6 Z M7,10 C6.44771525,10 6,9.55228475 6,9 C6,8.44771525 6.44771525,8 7,8 C7.55228475,8 8,8.44771525 8,9 C8,9.55228475 7.55228475,10 7,10 Z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+/* Custom Youtube Video CSS */
+iframe {
+  border: 8px solid #ffd00027;
+  border-radius: 4px;
+  min-width: 200px;
+  min-height: 200px;
+  display: block;
+  outline: 0px solid transparent;
+}
+
+div[data-youtube-video] > iframe {
+  cursor: move;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+}
+
+.ProseMirror-selectednode iframe {
+  transition: outline 0.15s;
+  outline: 6px solid #fbbf24;
+}
+
+@media only screen and (max-width: 480px) {
+  div[data-youtube-video] > iframe {
+    max-height: 50px;
+  }
+}
+
+@media only screen and (max-width: 720px) {
+  div[data-youtube-video] > iframe {
+    max-height: 100px;
+  }
+}
+
+/* CSS for bold coloring and highlighting issue*/
+span[style] > strong {
+  color: inherit;
+}
+
+mark[style] > strong {
+  color: inherit;
+}
+
+/* Placeholder in first line */
+p.tiptap-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.tiptap-paragraph {
+  margin: var(--space-8) 0;
+}
+
+.tiptap-hr {
+  margin: var(--space-14) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Heading styles below */
+h1.tiptap-heading {
+  font-size: var(--size-3xl);
+  font-weight: bold;
+  margin-top: var(--space-12);
+  margin-bottom: var(--space-8);
+}
+
+h2.tiptap-heading {
+  font-size: var(--size-2xl);
+  font-weight: bold;
+  margin-top: var(--space-12);
+  margin-bottom: var(--space-8);
+}
+
+h3.tiptap-heading {
+  font-size: var(--size-xl);
+  font-weight: bold;
+  margin-top: var(--space-12);
+  margin-bottom: var(--space-8);
+}
+
+h1.tiptap-heading:first-child,
+h2.tiptap-heading:first-child,
+h3.tiptap-heading:first-child {
+  margin-top: 0;
+}
+
+h1.tiptap-heading + h2.tiptap-heading,
+h1.tiptap-heading + h3.tiptap-heading,
+h2.tiptap-heading + h1.tiptap-heading,
+h2.tiptap-heading + h3.tiptap-heading,
+h3.tiptap-heading + h1.tiptap-heading,
+h3.tiptap-heading + h2.tiptap-heading {
+  margin-top: 0;
+}
+
+/* Advanced inline styles below */
+.tiptap-code {
+  font-size: 1.2em;
+  line-height: 1em;
+  background: var(--color-surface-hover);
+  border-radius: var(--radius-xs);
+  font-weight: 400;
+  padding: 0 var(--space-2);
+}
+
+h1 .tiptap-code,
+h2 .tiptap-code,
+h3 .tiptap-code {
+  font-size: 1em;
+}
+
+.tiptap-highlight {
+  background: yellow;
+}
+
+.tiptap-link {
+  color: var(--color-accent);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Block styles below */
+.tiptap-blockquote {
+  margin-left: var(--space-8);
+  padding-left: var(--space-8);
+  display: block;
+  border-left: var(--space-2) solid var(--color-border-contrasted);
+}
+
+/* biome-ignore lint/nursery/noDescendingSpecificity: <explanation> */
+.tiptap-list-item p {
+  margin: var(--space-2) 0;
+}
+
+.tiptap-list-item {
+  margin-left: var(--space-12);
+  padding-left: var(--space-2);
+  list-style: disc;
+}
+
+.tiptap-list-item .tiptap-list-item,
+.tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item {
+  margin-left: var(--space-8);
+  list-style: circle;
+}
+
+.tiptap-list-item .tiptap-list-item .tiptap-list-item,
+.tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item {
+  list-style: square;
+}
+
+.tiptap-list-item .tiptap-list-item .tiptap-list-item .tiptap-list-item,
+.tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item {
+  list-style: disc;
+}
+
+.tiptap-ordered-list .tiptap-list-item {
+  list-style: decimal;
+}
+
+.tiptap-ordered-list .tiptap-list-item .tiptap-list-item,
+.tiptap-ordered-list
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item {
+  list-style: lower-alpha;
+}
+
+.tiptap-ordered-list .tiptap-list-item .tiptap-list-item .tiptap-list-item,
+.tiptap-ordered-list
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item {
+  list-style: lower-roman;
+}
+
+.tiptap-ordered-list
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item,
+.tiptap-ordered-list
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item
+  .tiptap-list-item {
+  list-style: decimal;
+}
+
+.tiptap-task-list {
+  list-style: none;
+  padding: 0;
+}
+
+/* biome-ignore lint/nursery/noDescendingSpecificity: <explanation> */
+.tiptap-task-list p {
+  margin: 0;
+}
+
+/* Styling for task item in /components/TextEditor/CustomTaskItem */
+
+/* Media blocks below */
+.tiptap-code-block {
+  font-size: var(--size-sm);
+  line-height: 1.6;
+  white-space: pre;
+  background: rgb(var(--color-gray-850));
+  color: rgb(var(--color-gray-100));
+  padding: var(--space-8);
+  border-radius: var(--radius-xs);
+  margin: var(--space-8) 0;
+}
+
+.tiptap-image,
+.tiptap-youtube {
+  margin: var(--space-8) 0;
+}
+
+.tiptap-image.ProseMirror-selectednode,
+.tiptap-youtube.ProseMirror-selectednode {
+  outline: 1.5px solid var(--color-accent);
+}
+
+.tiptap-youtube {
+  border: 0;
+}
+
+.collaboration-cursor__label {
+  font-weight: 500;
+  font-family: var(--font-sans);
+  z-index: 10000;
+}
+
+/* Fixes Tailwind Prose bug with hidden cursor in code blocks */
+.prose :where(pre):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  overflow-x: visible;
+}

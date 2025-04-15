@@ -1,22 +1,266 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider     = "postgresql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model Group {
-  id String @id @default(uuid())
-  name String
+model User {
+  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email           String         @unique
+  firstname       String?
+  lastname        String?
+  createdAt       DateTime       @default(now())
+  clerkid         String         @unique
+  image           String?
+  bio             String?
+  workspaces      WorkSpace[]
+  pages           Page[]
+  subscription    Subscription?
+  members         Member[]
+  notifications   Notification[]
+  sentInvites     Invite[]       @relation("sender")
+  receivedInvites Invite[]       @relation("receiver")
+  onboarded       Boolean        @default(false)
+  lastActive      DateTime       @default(now())
+  favorites       Favorite[]
+  chats           Chat[]
+  documents       Document[]
+  suggestions     Suggestion[]
+}
+
+model Subscription {
+  id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user       User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String?           @unique @db.Uuid
+  createdAt  DateTime          @default(now())
+  plan       SUBSCRIPTION_PLAN @default(FREE)
+  updatedAt  DateTime          @default(now())
+  customerId String?           @unique
+  features   Json?
+  expiresAt  DateTime?
+}
+
+model WorkSpace {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  type        WorkSpaceType
+  name        String
+  description String?
+  icon        String?
+  creator     User?         @relation(fields: [creatorId], references: [id])
+  creatorId   String?       @db.Uuid
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  folders     Folder[]
+  pages       Page[]
+  members     Member[]
+  invites     Invite[]
+}
+
+model Folder {
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String     @default("Untitled Folder")
+  description  String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  workspace    WorkSpace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId  String?    @db.Uuid
+  pages        Page[]
+  parentFolder Folder?    @relation("FolderHierarchy", fields: [parentId], references: [id])
+  parentId     String?    @db.Uuid
+  subfolders   Folder[]   @relation("FolderHierarchy")
+  color        String?
+}
+
+model Page {
+  id               String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title            String     @default("Untitled")
+  type             PageType   @default(DOCUMENT)
+  liveblocksRoomId String     @unique
+  metadata         Json?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  folder           Folder?    @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  folderId         String?    @db.Uuid
+  creator          User?      @relation(fields: [creatorId], references: [id], onDelete: SetNull)
+  creatorId        String?    @db.Uuid
+  workspace        WorkSpace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId      String?    @db.Uuid
+  isDeleted        Boolean    @default(false)
+  aiGenerated      Boolean    @default(false)
+  isTemplate       Boolean    @default(false)
+  lastEdited       DateTime   @default(now())
+  icon             String?
+  coverImage       String?
+  favorites        Favorite[]
+}
+
+model Member {
+  id          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String     @db.Uuid
+  workspace   WorkSpace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String     @db.Uuid
+  role        MemberRole @default(VIEWER)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  lastActive  DateTime?
+
+  @@unique([userId, workspaceId])
+}
+
+model Notification {
+  id        String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String           @db.Uuid
+  content   String
+  type      NotificationType
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  link      String?
+  metadata  Json?
+}
+
+model Invite {
+  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sender      User         @relation("sender", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId    String       @db.Uuid
+  receiver    User?        @relation("receiver", fields: [receiverId], references: [id])
+  receiverId  String?      @db.Uuid
+  email       String?
+  message     String?
+  workspace   WorkSpace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String       @db.Uuid
+  status      InviteStatus @default(PENDING)
+  role        MemberRole   @default(VIEWER)
+  createdAt   DateTime     @default(now())
+  expiresAt   DateTime?
+  token       String       @unique
+}
+
+model Favorite {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @db.Uuid
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  pageId    String   @db.Uuid
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  @@unique([userId, pageId])
 }
 
+model Chat {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt   DateTime  @default(now())
+  title       String
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String    @db.Uuid
+  visibility  Visibility @default(PRIVATE)
+  messages    Message[]
+  votes       Vote[]
+}
 
+model Message {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chat        Chat     @relation(fields: [chatId], references: [id])
+  chatId      String   @db.Uuid
+  role        String
+  parts       Json
+  attachments Json
+  createdAt   DateTime @default(now())
+  votes       Vote[]
+
+  @@map("Message_v2")
+}
+
+model Vote {
+  chat      Chat    @relation(fields: [chatId], references: [id])
+  chatId    String  @db.Uuid
+  message   Message @relation(fields: [messageId], references: [id])
+  messageId String  @db.Uuid
+  isUpvoted Boolean
+
+  @@id([chatId, messageId])
+  @@map("Vote_v2")
+}
+
+model Document {
+  id          String       @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt   DateTime     @default(now())
+  title       String
+  content     String?
+  kind        DocumentKind @default(TEXT)
+  user        User         @relation(fields: [userId], references: [id])
+  userId      String       @db.Uuid
+  suggestions Suggestion[]
+
+  @@id([id, createdAt])
+}
+
+model Suggestion {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  document          Document @relation(fields: [documentId, documentCreatedAt], references: [id, createdAt])
+  documentId        String   @db.Uuid
+  documentCreatedAt DateTime
+  originalText      String
+  suggestedText     String
+  description       String?
+  isResolved        Boolean  @default(false)
+  user              User     @relation(fields: [userId], references: [id])
+  userId            String   @db.Uuid
+  createdAt         DateTime @default(now())
+}
+
+enum WorkSpaceType {
+  PERSONAL
+  PUBLIC
+  TEAM
+}
+
+enum PageType {
+  DOCUMENT
+  WHITEBOARD
+  CANVAS
+}
+
+enum SUBSCRIPTION_PLAN {
+  FREE
+  PRO
+  TEAM
+  ENTERPRISE
+}
+
+enum MemberRole {
+  OWNER
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  EXPIRED
+}
+
+enum NotificationType {
+  INVITE
+  MENTION
+  SHARE
+  UPDATE
+  AI_COMPLETE
+}
+
+enum Visibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum DocumentKind {
+  TEXT
+  IMAGE
+  SHEET
+}

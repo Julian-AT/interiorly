@@ -69,7 +69,7 @@ const LearnCarouselSkeleton = ({
           {Array.from({ length: itemsCount }).map((_, i) => (
             <CarouselItem
               key={i}
-              className="flex basis-1/2 flex-col rounded-lg bg-secondary pl-0 transition-all hover:shadow-md md:basis-1/3 lg:basis-1/4"
+              className="my-2 flex basis-1/2 flex-col rounded-lg bg-background-subtle pl-0 ring ring-ring transition-all hover:shadow-md md:basis-1/3 lg:basis-1/4"
             >
               <Skeleton className="h-32 w-full rounded-t-lg" />
               <div className="flex flex-col p-3">
