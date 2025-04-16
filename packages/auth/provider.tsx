@@ -3,7 +3,7 @@
 import { ClerkProvider } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
 import type { Theme } from '@clerk/types';
-import { tailwind } from '@interiorly/tailwind-config';
+import { defaultTheme } from '@interiorly/tailwind-config';
 import { useTheme } from 'next-themes';
 import type { ComponentProps } from 'react';
 
@@ -15,15 +15,15 @@ export const AuthProvider = (
   const baseTheme = isDark ? dark : undefined;
   const variables: Theme['variables'] = {
     // Core
-    fontFamily: tailwind.theme.fontFamily.sans.join(', '),
-    fontFamilyButtons: tailwind.theme.fontFamily.sans.join(', '),
-    fontSize: tailwind.theme.fontSize.sm[0],
+    fontFamily: defaultTheme.fontFamily.sans.join(', '),
+    fontFamilyButtons: defaultTheme.fontFamily.sans.join(', '),
+    fontSize: defaultTheme.fontSize.sm.join(', '),
     fontWeight: {
-      bold: tailwind.theme.fontWeight.bold,
-      normal: tailwind.theme.fontWeight.normal,
-      medium: tailwind.theme.fontWeight.medium,
+      bold: defaultTheme.fontWeight.bold,
+      normal: defaultTheme.fontWeight.normal,
+      medium: defaultTheme.fontWeight.medium,
     },
-    spacingUnit: tailwind.theme.spacing[4],
+    spacingUnit: defaultTheme.spacing[4],
   };
 
   const elements: Theme['elements'] = {
