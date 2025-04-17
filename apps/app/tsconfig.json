@@ -3,12 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@interiorly/*": [
-        "../../packages/*"
-      ]
+      "@/*": ["./*"],
+      "@interiorly/*": ["../../packages/*"]
     },
     "jsx": "preserve"
   },

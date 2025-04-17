@@ -1,14 +1,8 @@
-"use client";
+'use client';
 
-import { cn, colorWithOpacity, getRGBA } from "@/lib/utils";
-import type React from "react";
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { cn, colorWithOpacity, getRGBA } from '@/lib/utils';
+import type React from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 interface FlickeringGridProps extends React.HTMLAttributes<HTMLDivElement> {
   squareSize?: number;
@@ -29,12 +23,12 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
   squareSize = 3,
   gridGap = 3,
   flickerChance = 0.2,
-  color = "#B4B4B4",
+  color = '#B4B4B4',
   width,
   height,
   className,
   maxOpacity = 0.15,
-  text = "",
+  text = '',
   fontSize = 140,
   fontWeight = 600,
   ...props
@@ -57,25 +51,25 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
       cols: number,
       rows: number,
       squares: Float32Array,
-      dpr: number,
+      dpr: number
     ) => {
       ctx.clearRect(0, 0, width, height);
 
       // Create a separate canvas for the text mask
-      const maskCanvas = document.createElement("canvas");
+      const maskCanvas = document.createElement('canvas');
       maskCanvas.width = width;
       maskCanvas.height = height;
-      const maskCtx = maskCanvas.getContext("2d", { willReadFrequently: true });
+      const maskCtx = maskCanvas.getContext('2d', { willReadFrequently: true });
       if (!maskCtx) return;
 
       // Draw text on mask canvas
       if (text) {
         maskCtx.save();
         maskCtx.scale(dpr, dpr);
-        maskCtx.fillStyle = "white";
+        maskCtx.fillStyle = 'white';
         maskCtx.font = `${fontWeight} ${fontSize}px "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
-        maskCtx.textAlign = "center";
-        maskCtx.textBaseline = "middle";
+        maskCtx.textAlign = 'center';
+        maskCtx.textBaseline = 'middle';
         maskCtx.fillText(text, width / (2 * dpr), height / (2 * dpr));
         maskCtx.restore();
       }
@@ -92,10 +86,10 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
             x,
             y,
             squareWidth,
-            squareHeight,
+            squareHeight
           ).data;
           const hasText = maskData.some(
-            (value, index) => index % 4 === 0 && value > 0,
+            (value, index) => index % 4 === 0 && value > 0
           );
 
           const opacity = squares[i * rows + j];
@@ -108,7 +102,7 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
         }
       }
     },
-    [memoizedColor, squareSize, gridGap, text, fontSize, fontWeight],
+    [memoizedColor, squareSize, gridGap, text, fontSize, fontWeight]
   );
 
   const setupCanvas = useCallback(
@@ -128,7 +122,7 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
 
       return { cols, rows, squares, dpr };
     },
-    [squareSize, gridGap, maxOpacity],
+    [squareSize, gridGap, maxOpacity]
   );
 
   const updateSquares = useCallback(
@@ -139,7 +133,7 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
         }
       }
     },
-    [flickerChance, maxOpacity],
+    [flickerChance, maxOpacity]
   );
 
   useEffect(() => {
@@ -147,7 +141,7 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
     const container = containerRef.current;
     if (!canvas || !container) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     let animationFrameId: number;
@@ -177,7 +171,7 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
         gridParams.cols,
         gridParams.rows,
         gridParams.squares,
-        gridParams.dpr,
+        gridParams.dpr
       );
       animationFrameId = requestAnimationFrame(animate);
     };
@@ -192,7 +186,7 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
       ([entry]) => {
         setIsInView(entry.isIntersecting);
       },
-      { threshold: 0 },
+      { threshold: 0 }
     );
 
     intersectionObserver.observe(canvas);

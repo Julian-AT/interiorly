@@ -35,7 +35,7 @@ export const POST = async () => {
     orgId,
     userInfo: {
       name:
-        user.fullName ?? user.emailAddresses.at(0)?.emailAddress ?? "Anonymous",
+        user.fullName ?? user.emailAddresses.at(0)?.emailAddress ?? 'Anonymous',
       avatar: user.imageUrl ?? undefined,
       color: COLORS[Math.floor(Math.random() * COLORS.length)],
     },

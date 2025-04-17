@@ -1,96 +1,96 @@
-"use client";
+'use client';
 
-import { HeroVideoSection } from "@/components/sections/hero-video-section";
-import { siteConfig } from "@/lib/config";
-import Link from "next/link";
-import { FollowPointer } from "@/components/ui/following-pointer";
+import { HeroVideoSection } from '@/components/sections/hero-video-section';
+import { FollowPointer } from '@/components/ui/following-pointer';
+import { siteConfig } from '@/lib/config';
+import Link from 'next/link';
 
 export function HeroSection() {
-	const { hero } = siteConfig;
+  const { hero } = siteConfig;
 
-	return (
-		<section id="hero" className="w-full relative my-3">
-			<div className="relative flex flex-col items-center w-full px-6">
-				<div className="absolute inset-0">
-					<div className="absolute inset-0 -z-10 h-[600px] md:h-[800px] w-full [background:radial-gradient(125%_125%_at_50%_10%,var(--background)_40%,var(--secondary)_100%)] rounded-b-xl" />
-				</div>
-				<div className="relative z-10 pt-32 max-w-4xl mx-auto h-full w-full flex flex-col gap-10 items-center justify-center">
-					{/* <LampContainer> */}
-					<FollowPointer
-						x={-105}
-						y={210}
-						title="Emma"
-						direction="right"
-						colorIndex={0} // #0ea5e9 - sky blue
-						animationOffset={153}
-					/>
-					<FollowPointer
-						x={42}
-						y={400}
-						title="Anthony"
-						direction="right"
-						colorIndex={2} // #14b8a6 - teal
-						animationOffset={250}
-					/>
-					<FollowPointer
-						x={932}
-						y={180}
-						title="Sophia"
-						colorIndex={4} // #3b82f6 - blue
-						animationOffset={176}
-					/>
-					<FollowPointer
-						x={791}
-						y={372}
-						title="Oliver"
-						colorIndex={6} // #eab308 - yellow
-						animationOffset={30}
-					/>
-					<div className="flex flex-col items-center justify-center gap-5 relative border border-dotted dark:border-blue-700 border-blue-500 p-5">
-						{/* Badge above the box */}
-						<div className="absolute -top-8 left-0 px-2 py-0.5 bg-secondary text-xs font-medium rounded-md text-white">
-							&lt;h1&gt;
-						</div>
+  return (
+    <section id="hero" className="relative my-3 w-full">
+      <div className="relative flex w-full flex-col items-center px-6">
+        <div className="absolute inset-0">
+          <div className="-z-10 absolute inset-0 h-[600px] w-full rounded-b-xl [background:radial-gradient(125%_125%_at_50%_10%,var(--background)_40%,var(--secondary)_100%)] md:h-[800px]" />
+        </div>
+        <div className="relative z-10 mx-auto flex h-full w-full max-w-4xl flex-col items-center justify-center gap-10 pt-32">
+          {/* <LampContainer> */}
+          <FollowPointer
+            x={-105}
+            y={210}
+            title="Emma"
+            direction="right"
+            colorIndex={0} // #0ea5e9 - sky blue
+            animationOffset={153}
+          />
+          <FollowPointer
+            x={42}
+            y={400}
+            title="Anthony"
+            direction="right"
+            colorIndex={2} // #14b8a6 - teal
+            animationOffset={250}
+          />
+          <FollowPointer
+            x={932}
+            y={180}
+            title="Sophia"
+            colorIndex={4} // #3b82f6 - blue
+            animationOffset={176}
+          />
+          <FollowPointer
+            x={791}
+            y={372}
+            title="Oliver"
+            colorIndex={6} // #eab308 - yellow
+            animationOffset={30}
+          />
+          <div className="relative flex flex-col items-center justify-center gap-5 border border-blue-500 border-dotted p-5 dark:border-blue-700">
+            {/* Badge above the box */}
+            <div className="-top-8 absolute left-0 rounded-md bg-secondary px-2 py-0.5 font-medium text-white text-xs">
+              &lt;h1&gt;
+            </div>
 
-						{/* Corner dots */}
-						<div className="absolute top-0 left-0 w-1.5 h-1.5 bg-white rounded-xs ring-1 ring-blue-700 -translate-x-1/2 -translate-y-1/2" />
-						<div className="absolute top-0 right-0 w-1.5 h-1.5 bg-white rounded-xs ring-1 ring-blue-700 translate-x-1/2 -translate-y-1/2" />
-						<div className="absolute bottom-0 left-0 w-1.5 h-1.5 bg-white rounded-xs ring-1 ring-blue-700 -translate-x-1/2 translate-y-1/2" />
-						<div className="absolute bottom-0 right-0 w-1.5 h-1.5 bg-white rounded-xs ring-1 ring-blue-700 translate-x-1/2 translate-y-1/2" />
+            {/* Corner dots */}
+            <div className="-translate-x-1/2 -translate-y-1/2 absolute top-0 left-0 h-1.5 w-1.5 rounded-xs bg-white ring-1 ring-blue-700" />
+            <div className="-translate-y-1/2 absolute top-0 right-0 h-1.5 w-1.5 translate-x-1/2 rounded-xs bg-white ring-1 ring-blue-700" />
+            <div className="-translate-x-1/2 absolute bottom-0 left-0 h-1.5 w-1.5 translate-y-1/2 rounded-xs bg-white ring-1 ring-blue-700" />
+            <div className="absolute right-0 bottom-0 h-1.5 w-1.5 translate-x-1/2 translate-y-1/2 rounded-xs bg-white ring-1 ring-blue-700" />
 
-						{/* Horizontal bars */}
-						<div className="absolute top-0 left-1/2 w-5 h-[1px] bg-muted-foreground -translate-x-1/2 translate-y-[4px]" />
-						<div className="absolute bottom-0 left-1/2 w-5 h-[1px] bg-muted-foreground -translate-x-1/2 -translate-y-[4px]" />
+            {/* Horizontal bars */}
+            <div className="-translate-x-1/2 absolute top-0 left-1/2 h-[1px] w-5 translate-y-[4px] bg-muted-foreground" />
+            <div className="-translate-x-1/2 -translate-y-[4px] absolute bottom-0 left-1/2 h-[1px] w-5 bg-muted-foreground" />
 
-						{/* Vertical bars */}
-						<div className="absolute top-1/2 left-0 w-[1px] h-5 bg-muted-foreground translate-x-[4px] -translate-y-1/2" />
-						<div className="absolute top-1/2 right-0 w-[1px] h-5 bg-muted-foreground -translate-x-[4px] -translate-y-1/2" />
+            {/* Vertical bars */}
+            <div className="-translate-y-1/2 absolute top-1/2 left-0 h-5 w-[1px] translate-x-[4px] bg-muted-foreground" />
+            <div className="-translate-x-[4px] -translate-y-1/2 absolute top-1/2 right-0 h-5 w-[1px] bg-muted-foreground" />
 
-						<h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-medium tracking-tighter text-balance text-center text-primary">
-							{hero.title}
-						</h1>
-					</div>
-					<p className="text-base md:text-lg text-center text-muted-foreground font-medium text-balance leading-relaxed tracking-tight -mt-6">
-						{hero.description}
-					</p>
-					{/* </LampContainer> */}
-					<div className="flex items-center gap-2.5 flex-wrap justify-center">
-						<Link
-							href={hero.cta.primary.href}
-							className="bg-secondary h-9 flex items-center justify-center text-sm font-normal tracking-wide rounded-full text-primary-foreground dark:text-secondary-foreground w-32 px-4 shadow-[inset_0_1px_2px_rgba(255,255,255,0.25),0_3px_3px_-1.5px_rgba(16,24,40,0.06),0_1px_1px_rgba(16,24,40,0.08)] border border-white/[0.12] hover:bg-secondary/80 transition-all ease-out active:scale-95"
-						>
-							{hero.cta.primary.text}
-						</Link>
-						<Link
-							href={hero.cta.secondary.href}
-							className="h-10 flex items-center justify-center w-32 px-5 text-sm font-normal tracking-wide text-primary rounded-full transition-all ease-out active:scale-95 bg-white dark:bg-background border border-[#E5E7EB] dark:border-[#27272A] hover:bg-white/80 dark:hover:bg-background/80"
-						>
-							{hero.cta.secondary.text}
-						</Link>
-					</div>
-				</div>
-			</div>
-			<HeroVideoSection />
-		</section>
-	);
+            <h1 className="text-balance text-center font-medium text-3xl text-primary tracking-tighter md:text-4xl lg:text-5xl xl:text-7xl">
+              {hero.title}
+            </h1>
+          </div>
+          <p className="-mt-6 text-balance text-center font-medium text-base text-muted-foreground leading-relaxed tracking-tight md:text-lg">
+            {hero.description}
+          </p>
+          {/* </LampContainer> */}
+          <div className="flex flex-wrap items-center justify-center gap-2.5">
+            <Link
+              href={hero.cta.primary.href}
+              className="flex h-9 w-32 items-center justify-center rounded-full border border-white/[0.12] bg-secondary px-4 font-normal text-primary-foreground text-sm tracking-wide shadow-[inset_0_1px_2px_rgba(255,255,255,0.25),0_3px_3px_-1.5px_rgba(16,24,40,0.06),0_1px_1px_rgba(16,24,40,0.08)] transition-all ease-out hover:bg-secondary/80 active:scale-95 dark:text-secondary-foreground"
+            >
+              {hero.cta.primary.text}
+            </Link>
+            <Link
+              href={hero.cta.secondary.href}
+              className="flex h-10 w-32 items-center justify-center rounded-full border border-[#E5E7EB] bg-white px-5 font-normal text-primary text-sm tracking-wide transition-all ease-out hover:bg-white/80 active:scale-95 dark:border-[#27272A] dark:bg-background dark:hover:bg-background/80"
+            >
+              {hero.cta.secondary.text}
+            </Link>
+          </div>
+        </div>
+      </div>
+      <HeroVideoSection />
+    </section>
+  );
 }

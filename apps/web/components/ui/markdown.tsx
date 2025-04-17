@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { cn } from "@/lib/utils";
-import { marked } from "marked";
-import { memo, useId, useMemo } from "react";
-import ReactMarkdown, { type Components } from "react-markdown";
-import remarkGfm from "remark-gfm";
-import { CodeBlock, CodeBlockCode } from "./code-block";
+import { cn } from '@/lib/utils';
+import { marked } from 'marked';
+import { memo, useId, useMemo } from 'react';
+import ReactMarkdown, { type Components } from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { CodeBlock, CodeBlockCode } from './code-block';
 
 export type MarkdownProps = {
   children: string;
@@ -19,9 +19,9 @@ function parseMarkdownIntoBlocks(markdown: string): string[] {
 }
 
 function extractLanguage(className?: string): string {
-  if (!className) return "plaintext";
+  if (!className) return 'plaintext';
   const match = className.match(/language-(\w+)/);
-  return match ? match[1] : "plaintext";
+  return match ? match[1] : 'plaintext';
 }
 
 const INITIAL_COMPONENTS: Partial<Components> = {
@@ -34,7 +34,7 @@ const INITIAL_COMPONENTS: Partial<Components> = {
       return (
         <span
           className={cn(
-            "bg-primary-foreground rounded-sm px-1 font-mono text-sm",
+            'rounded-sm bg-primary-foreground px-1 font-mono text-sm',
             className
           )}
           {...props}
@@ -76,7 +76,7 @@ const MemoizedMarkdownBlock = memo(
   }
 );
 
-MemoizedMarkdownBlock.displayName = "MemoizedMarkdownBlock";
+MemoizedMarkdownBlock.displayName = 'MemoizedMarkdownBlock';
 
 function MarkdownComponent({
   children,
@@ -102,6 +102,6 @@ function MarkdownComponent({
 }
 
 const Markdown = memo(MarkdownComponent);
-Markdown.displayName = "Markdown";
+Markdown.displayName = 'Markdown';
 
 export { Markdown };

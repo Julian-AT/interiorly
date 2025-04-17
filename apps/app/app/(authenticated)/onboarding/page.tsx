@@ -1,9 +1,9 @@
 'use client';
-
-import { OrganizationSelector } from '@/components/organization/organization-selector';
-import { CreateOrganization, useOrganization, useOrganizationList } from '@interiorly/auth/client';
-import { Loading03Icon } from 'hugeicons-react';
-import { redirect } from 'next/navigation';
+import {
+  CreateOrganization,
+  useOrganization,
+  useOrganizationList,
+} from '@interiorly/auth/client';
 
 const OnboardingPage = () => {
   const { organization, isLoaded: isLoadedOrg } = useOrganization();
@@ -15,9 +15,11 @@ const OnboardingPage = () => {
     userMemberships: true,
   });
 
-  return <div className='min-h-screen min-w-screen flex items-center justify-center'>
-    <CreateOrganization hideSlug />
-  </div>
+  return (
+    <div className="flex min-h-screen min-w-screen items-center justify-center">
+      <CreateOrganization hideSlug />
+    </div>
+  );
 
   // if (!isLoadedOrg || !isLoadedOrgList) {
   //   return (
