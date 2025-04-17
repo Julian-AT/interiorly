@@ -1,6 +1,6 @@
-import { siteConfig } from '@/lib/config';
-import { Feature as FeatureComponent } from '@interiorly/design-system/components/ui/feature-slideshow';
-import { SectionHeader } from '@interiorly/design-system/components/web/section-header';
+import { SectionHeader } from "@/components/section-header";
+import { Feature as FeatureComponent } from "@/components/ui/feature-slideshow";
+import { siteConfig } from "@/lib/config";
 
 export function FeatureSection() {
   const { title, description, items } = siteConfig.featureSection;
@@ -8,17 +8,17 @@ export function FeatureSection() {
   return (
     <section
       id="features"
-      className="relative flex w-full flex-col items-center justify-center gap-5"
+      className="flex flex-col items-center justify-center gap-5 w-full relative"
     >
       <SectionHeader>
-        <h2 className="text-balance text-center font-medium text-3xl tracking-tighter md:text-4xl">
+        <h2 className="text-3xl md:text-4xl font-medium tracking-tighter text-center text-balance">
           {title}
         </h2>
-        <p className="text-balance text-center font-medium text-muted-foreground">
+        <p className="text-muted-foreground text-center text-balance font-medium">
           {description}
         </p>
       </SectionHeader>
-      <div className="flex h-full w-full items-center justify-center lg:h-[450px]">
+      <div className="w-full h-full lg:h-[450px] flex items-center justify-center">
         <FeatureComponent
           collapseDelay={5000}
           linePosition="bottom"

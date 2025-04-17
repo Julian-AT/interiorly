@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { ImageResponse } from "next/og";
+import NextImage from "next/image";
 
 // Configuration exports
 export const runtime = "edge";
@@ -29,7 +30,7 @@ export default async function Image() {
 					background: "black",
 				}}
 			>
-				<img
+				<NextImage
 					src={`${baseUrl}/agent-template-og.png`}
 					alt={alt}
 					style={{
@@ -43,6 +44,6 @@ export default async function Image() {
 		);
 	} catch (error) {
 		console.error("Error generating OpenGraph image:", error);
-		return new Response(`Failed to generate image`, { status: 500 });
+		return new Response("Failed to generate image", { status: 500 });
 	}
 }

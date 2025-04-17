@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { motion } from 'motion/react';
-import React, { useRef, useState } from 'react';
-import { siteConfig } from '../../../../apps/web/lib/config';
+import { siteConfig } from "@/lib/config";
+import { motion } from "motion/react";
+import React, { useRef, useState } from "react";
 
 interface NavItem {
   name: string;
@@ -16,13 +16,13 @@ export function NavMenu() {
   const [left, setLeft] = useState(0);
   const [width, setWidth] = useState(0);
   const [isReady, setIsReady] = useState(false);
-  const [activeSection, setActiveSection] = useState('hero');
+  const [activeSection, setActiveSection] = useState("hero");
   const [isManualScroll, setIsManualScroll] = useState(false);
 
   React.useEffect(() => {
     // Initialize with first nav item
     const firstItem = ref.current?.querySelector(
-      `[href="#${navs[0].href.substring(1)}"]`
+      `[href="#${navs[0].href.substring(1)}"]`,
     )?.parentElement;
     if (firstItem) {
       const rect = firstItem.getBoundingClientRect();
@@ -58,7 +58,7 @@ export function NavMenu() {
       // Update active section and nav indicator
       setActiveSection(closestSection);
       const navItem = ref.current?.querySelector(
-        `[href="#${closestSection}"]`
+        `[href="#${closestSection}"]`,
       )?.parentElement;
       if (navItem) {
         const rect = navItem.getBoundingClientRect();
@@ -67,14 +67,14 @@ export function NavMenu() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     handleScroll(); // Initial check
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [isManualScroll]);
 
   const handleClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
-    item: NavItem
+    item: NavItem,
   ) => {
     e.preventDefault();
 
@@ -101,7 +101,7 @@ export function NavMenu() {
       // Smooth scroll to exact position
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
 
       // Reset manual scroll flag after animation completes
@@ -112,18 +112,18 @@ export function NavMenu() {
   };
 
   return (
-    <div className="hidden w-full md:block">
+    <div className="w-full hidden md:block">
       <ul
-        className="relative mx-auto flex h-11 w-fit items-center justify-center rounded-full px-2"
+        className="relative mx-auto flex w-fit rounded-full h-11 px-2 items-center justify-center"
         ref={ref}
       >
         {navs.map((item) => (
           <li
             key={item.name}
-            className={`z-10 flex h-full cursor-pointer items-center justify-center px-4 py-2 font-medium text-sm transition-colors duration-200 ${
+            className={`z-10 cursor-pointer h-full flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors duration-200 ${
               activeSection === item.href.substring(1)
-                ? 'text-primary'
-                : 'text-primary/60 hover:text-primary'
+                ? "text-primary"
+                : "text-primary/60 hover:text-primary"
             } tracking-tight`}
           >
             <a href={item.href} onClick={(e) => handleClick(e, item)}>
@@ -134,8 +134,8 @@ export function NavMenu() {
         {isReady && (
           <motion.li
             animate={{ left, width }}
-            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-            className="absolute inset-0 my-1.5 rounded-full border border-border bg-accent/60"
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            className="absolute inset-0 my-1.5 rounded-full bg-accent/60 border border-border"
           />
         )}
       </ul>
